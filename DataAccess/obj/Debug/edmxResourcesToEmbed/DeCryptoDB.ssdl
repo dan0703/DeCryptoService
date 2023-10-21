@@ -1,0 +1,274 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DeCryptoModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="AccountAccount">
+    <Key>
+      <PropertyRef Name="Account2_Nickname" />
+      <PropertyRef Name="Account1_Nickname" />
+    </Key>
+    <Property Name="Account2_Nickname" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="Account1_Nickname" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="IsBlocked" Type="bit" />
+    <Property Name="StartDate" Type="date" />
+  </EntityType>
+  <EntityType Name="AccountBlueTeam">
+    <Key>
+      <PropertyRef Name="Account_Nickname" />
+      <PropertyRef Name="BlueTeam_BlueTeamId" />
+    </Key>
+    <Property Name="Account_Nickname" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="BlueTeam_BlueTeamId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="AccountRedTeam">
+    <Key>
+      <PropertyRef Name="Account_Nickname" />
+      <PropertyRef Name="RedTeam_RedTeamId" />
+    </Key>
+    <Property Name="Account_Nickname" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="RedTeam_RedTeamId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="AccountSet">
+    <Key>
+      <PropertyRef Name="Nickname" />
+    </Key>
+    <Property Name="Nickname" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="Email" Type="nvarchar" MaxLength="45" Nullable="false" />
+    <Property Name="EmailVerify" Type="bit" Nullable="false" />
+    <Property Name="Password" Type="nvarchar" MaxLength="45" Nullable="false" />
+    <Property Name="FriendRequest_FriendRequestId" Type="int" Nullable="false" />
+    <Property Name="FriendRequest1_FriendRequestId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="BlueTeamSet">
+    <Key>
+      <PropertyRef Name="BlueTeamId" />
+    </Key>
+    <Property Name="BlueTeamId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+  </EntityType>
+  <EntityType Name="FriendListSet">
+    <Key>
+      <PropertyRef Name="FriendListId" />
+    </Key>
+    <Property Name="FriendListId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="IsBlocked" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Date" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="FriendRequestSet">
+    <Key>
+      <PropertyRef Name="FriendRequestId" />
+    </Key>
+    <Property Name="FriendRequestId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Date" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="GameSet">
+    <Key>
+      <PropertyRef Name="GamesId" />
+    </Key>
+    <Property Name="GamesId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="WinnerTeam" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="RoundNumber" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="BlueTeam_BlueTeamId" Type="int" Nullable="false" />
+    <Property Name="RedTeam_RedTeamId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="RedTeamSet">
+    <Key>
+      <PropertyRef Name="RedTeamId" />
+    </Key>
+    <Property Name="RedTeamId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+  </EntityType>
+  <EntityType Name="UserSet">
+    <Key>
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="BirthDay" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Account_Nickname" Type="nvarchar" MaxLength="20" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_AccountAccount_Account">
+    <End Role="AccountSet" Type="Self.AccountSet" Multiplicity="1" />
+    <End Role="AccountAccount" Type="Self.AccountAccount" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AccountSet">
+        <PropertyRef Name="Nickname" />
+      </Principal>
+      <Dependent Role="AccountAccount">
+        <PropertyRef Name="Account2_Nickname" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AccountAccount_Account1">
+    <End Role="AccountSet" Type="Self.AccountSet" Multiplicity="1" />
+    <End Role="AccountAccount" Type="Self.AccountAccount" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AccountSet">
+        <PropertyRef Name="Nickname" />
+      </Principal>
+      <Dependent Role="AccountAccount">
+        <PropertyRef Name="Account1_Nickname" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AccountBlueTeam_Account">
+    <End Role="AccountSet" Type="Self.AccountSet" Multiplicity="1" />
+    <End Role="AccountBlueTeam" Type="Self.AccountBlueTeam" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AccountSet">
+        <PropertyRef Name="Nickname" />
+      </Principal>
+      <Dependent Role="AccountBlueTeam">
+        <PropertyRef Name="Account_Nickname" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AccountBlueTeam_BlueTeam">
+    <End Role="BlueTeamSet" Type="Self.BlueTeamSet" Multiplicity="1" />
+    <End Role="AccountBlueTeam" Type="Self.AccountBlueTeam" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BlueTeamSet">
+        <PropertyRef Name="BlueTeamId" />
+      </Principal>
+      <Dependent Role="AccountBlueTeam">
+        <PropertyRef Name="BlueTeam_BlueTeamId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AccountFriendRequest">
+    <End Role="FriendRequestSet" Type="Self.FriendRequestSet" Multiplicity="1" />
+    <End Role="AccountSet" Type="Self.AccountSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FriendRequestSet">
+        <PropertyRef Name="FriendRequestId" />
+      </Principal>
+      <Dependent Role="AccountSet">
+        <PropertyRef Name="FriendRequest_FriendRequestId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AccountFriendRequest1">
+    <End Role="FriendRequestSet" Type="Self.FriendRequestSet" Multiplicity="1" />
+    <End Role="AccountSet" Type="Self.AccountSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FriendRequestSet">
+        <PropertyRef Name="FriendRequestId" />
+      </Principal>
+      <Dependent Role="AccountSet">
+        <PropertyRef Name="FriendRequest1_FriendRequestId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AccountRedTeam_Account">
+    <End Role="AccountSet" Type="Self.AccountSet" Multiplicity="1" />
+    <End Role="AccountRedTeam" Type="Self.AccountRedTeam" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AccountSet">
+        <PropertyRef Name="Nickname" />
+      </Principal>
+      <Dependent Role="AccountRedTeam">
+        <PropertyRef Name="Account_Nickname" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AccountRedTeam_RedTeam">
+    <End Role="RedTeamSet" Type="Self.RedTeamSet" Multiplicity="1" />
+    <End Role="AccountRedTeam" Type="Self.AccountRedTeam" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="RedTeamSet">
+        <PropertyRef Name="RedTeamId" />
+      </Principal>
+      <Dependent Role="AccountRedTeam">
+        <PropertyRef Name="RedTeam_RedTeamId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BlueTeamGame">
+    <End Role="BlueTeamSet" Type="Self.BlueTeamSet" Multiplicity="1" />
+    <End Role="GameSet" Type="Self.GameSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BlueTeamSet">
+        <PropertyRef Name="BlueTeamId" />
+      </Principal>
+      <Dependent Role="GameSet">
+        <PropertyRef Name="BlueTeam_BlueTeamId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_RedTeamGame">
+    <End Role="RedTeamSet" Type="Self.RedTeamSet" Multiplicity="1" />
+    <End Role="GameSet" Type="Self.GameSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="RedTeamSet">
+        <PropertyRef Name="RedTeamId" />
+      </Principal>
+      <Dependent Role="GameSet">
+        <PropertyRef Name="RedTeam_RedTeamId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserAccount">
+    <End Role="AccountSet" Type="Self.AccountSet" Multiplicity="1" />
+    <End Role="UserSet" Type="Self.UserSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AccountSet">
+        <PropertyRef Name="Nickname" />
+      </Principal>
+      <Dependent Role="UserSet">
+        <PropertyRef Name="Account_Nickname" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="DeCryptoModelStoreContainer">
+    <EntitySet Name="AccountAccount" EntityType="Self.AccountAccount" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="AccountBlueTeam" EntityType="Self.AccountBlueTeam" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="AccountRedTeam" EntityType="Self.AccountRedTeam" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="AccountSet" EntityType="Self.AccountSet" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="BlueTeamSet" EntityType="Self.BlueTeamSet" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="FriendListSet" EntityType="Self.FriendListSet" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="FriendRequestSet" EntityType="Self.FriendRequestSet" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="GameSet" EntityType="Self.GameSet" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="RedTeamSet" EntityType="Self.RedTeamSet" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserSet" EntityType="Self.UserSet" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_AccountAccount_Account" Association="Self.FK_AccountAccount_Account">
+      <End Role="AccountSet" EntitySet="AccountSet" />
+      <End Role="AccountAccount" EntitySet="AccountAccount" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AccountAccount_Account1" Association="Self.FK_AccountAccount_Account1">
+      <End Role="AccountSet" EntitySet="AccountSet" />
+      <End Role="AccountAccount" EntitySet="AccountAccount" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AccountBlueTeam_Account" Association="Self.FK_AccountBlueTeam_Account">
+      <End Role="AccountSet" EntitySet="AccountSet" />
+      <End Role="AccountBlueTeam" EntitySet="AccountBlueTeam" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AccountBlueTeam_BlueTeam" Association="Self.FK_AccountBlueTeam_BlueTeam">
+      <End Role="BlueTeamSet" EntitySet="BlueTeamSet" />
+      <End Role="AccountBlueTeam" EntitySet="AccountBlueTeam" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AccountFriendRequest" Association="Self.FK_AccountFriendRequest">
+      <End Role="FriendRequestSet" EntitySet="FriendRequestSet" />
+      <End Role="AccountSet" EntitySet="AccountSet" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AccountFriendRequest1" Association="Self.FK_AccountFriendRequest1">
+      <End Role="FriendRequestSet" EntitySet="FriendRequestSet" />
+      <End Role="AccountSet" EntitySet="AccountSet" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AccountRedTeam_Account" Association="Self.FK_AccountRedTeam_Account">
+      <End Role="AccountSet" EntitySet="AccountSet" />
+      <End Role="AccountRedTeam" EntitySet="AccountRedTeam" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AccountRedTeam_RedTeam" Association="Self.FK_AccountRedTeam_RedTeam">
+      <End Role="RedTeamSet" EntitySet="RedTeamSet" />
+      <End Role="AccountRedTeam" EntitySet="AccountRedTeam" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BlueTeamGame" Association="Self.FK_BlueTeamGame">
+      <End Role="BlueTeamSet" EntitySet="BlueTeamSet" />
+      <End Role="GameSet" EntitySet="GameSet" />
+    </AssociationSet>
+    <AssociationSet Name="FK_RedTeamGame" Association="Self.FK_RedTeamGame">
+      <End Role="RedTeamSet" EntitySet="RedTeamSet" />
+      <End Role="GameSet" EntitySet="GameSet" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserAccount" Association="Self.FK_UserAccount">
+      <End Role="AccountSet" EntitySet="AccountSet" />
+      <End Role="UserSet" EntitySet="UserSet" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="DeCryptoModelStoreContainer" CdmEntityContainer="DeCryptoEntities">
+    <EntitySetMapping Name="AccountAccount">
+      <EntityTypeMapping TypeName="DeCryptoModel.AccountAccount">
+        <MappingFragment StoreEntitySet="AccountAccount">
+          <ScalarProperty Name="Account2_Nickname" ColumnName="Account2_Nickname" />
+          <ScalarProperty Name="Account1_Nickname" ColumnName="Account1_Nickname" />
+          <ScalarProperty Name="IsBlocked" ColumnName="IsBlocked" />
+          <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AccountSet">
+      <EntityTypeMapping TypeName="DeCryptoModel.AccountSet">
+        <MappingFragment StoreEntitySet="AccountSet">
+          <ScalarProperty Name="Nickname" ColumnName="Nickname" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="EmailVerify" ColumnName="EmailVerify" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="FriendRequest_FriendRequestId" ColumnName="FriendRequest_FriendRequestId" />
+          <ScalarProperty Name="FriendRequest1_FriendRequestId" ColumnName="FriendRequest1_FriendRequestId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BlueTeamSet">
+      <EntityTypeMapping TypeName="DeCryptoModel.BlueTeamSet">
+        <MappingFragment StoreEntitySet="BlueTeamSet">
+          <ScalarProperty Name="BlueTeamId" ColumnName="BlueTeamId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FriendListSet">
+      <EntityTypeMapping TypeName="DeCryptoModel.FriendListSet">
+        <MappingFragment StoreEntitySet="FriendListSet">
+          <ScalarProperty Name="FriendListId" ColumnName="FriendListId" />
+          <ScalarProperty Name="IsBlocked" ColumnName="IsBlocked" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FriendRequestSet">
+      <EntityTypeMapping TypeName="DeCryptoModel.FriendRequestSet">
+        <MappingFragment StoreEntitySet="FriendRequestSet">
+          <ScalarProperty Name="FriendRequestId" ColumnName="FriendRequestId" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="GameSet">
+      <EntityTypeMapping TypeName="DeCryptoModel.GameSet">
+        <MappingFragment StoreEntitySet="GameSet">
+          <ScalarProperty Name="GamesId" ColumnName="GamesId" />
+          <ScalarProperty Name="WinnerTeam" ColumnName="WinnerTeam" />
+          <ScalarProperty Name="RoundNumber" ColumnName="RoundNumber" />
+          <ScalarProperty Name="BlueTeam_BlueTeamId" ColumnName="BlueTeam_BlueTeamId" />
+          <ScalarProperty Name="RedTeam_RedTeamId" ColumnName="RedTeam_RedTeamId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RedTeamSet">
+      <EntityTypeMapping TypeName="DeCryptoModel.RedTeamSet">
+        <MappingFragment StoreEntitySet="RedTeamSet">
+          <ScalarProperty Name="RedTeamId" ColumnName="RedTeamId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserSet">
+      <EntityTypeMapping TypeName="DeCryptoModel.UserSet">
+        <MappingFragment StoreEntitySet="UserSet">
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="BirthDay" ColumnName="BirthDay" />
+          <ScalarProperty Name="Account_Nickname" ColumnName="Account_Nickname" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="AccountBlueTeam" TypeName="DeCryptoModel.AccountBlueTeam" StoreEntitySet="AccountBlueTeam">
+      <EndProperty Name="AccountSet">
+        <ScalarProperty Name="Nickname" ColumnName="Account_Nickname" />
+      </EndProperty>
+      <EndProperty Name="BlueTeamSet">
+        <ScalarProperty Name="BlueTeamId" ColumnName="BlueTeam_BlueTeamId" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="AccountRedTeam" TypeName="DeCryptoModel.AccountRedTeam" StoreEntitySet="AccountRedTeam">
+      <EndProperty Name="AccountSet">
+        <ScalarProperty Name="Nickname" ColumnName="Account_Nickname" />
+      </EndProperty>
+      <EndProperty Name="RedTeamSet">
+        <ScalarProperty Name="RedTeamId" ColumnName="RedTeam_RedTeamId" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping>

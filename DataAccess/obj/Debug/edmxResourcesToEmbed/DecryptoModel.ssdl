@@ -1,0 +1,225 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DeCryptoModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="DeCryptoModelStoreContainer">
+    <EntitySet Name="AccountSet" EntityType="DeCryptoModel.Store.AccountSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="BlueTeamSet" EntityType="DeCryptoModel.Store.BlueTeamSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="FriendList" EntityType="DeCryptoModel.Store.FriendList" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="GameSet" EntityType="DeCryptoModel.Store.GameSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="RedTeamSet" EntityType="DeCryptoModel.Store.RedTeamSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="UserSet" EntityType="DeCryptoModel.Store.UserSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="AccountBlueTeam" EntityType="DeCryptoModel.Store.AccountBlueTeam" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="AccountRedTeam" EntityType="DeCryptoModel.Store.AccountRedTeam" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="FK_AccountAccount_Account" Association="DeCryptoModel.Store.FK_AccountAccount_Account">
+      <End Role="AccountSet" EntitySet="AccountSet" />
+      <End Role="FriendList" EntitySet="FriendList" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AccountAccount_Account1" Association="DeCryptoModel.Store.FK_AccountAccount_Account1">
+      <End Role="AccountSet" EntitySet="AccountSet" />
+      <End Role="FriendList" EntitySet="FriendList" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserAccount" Association="DeCryptoModel.Store.FK_UserAccount">
+      <End Role="AccountSet" EntitySet="AccountSet" />
+      <End Role="UserSet" EntitySet="UserSet" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BlueTeamGame" Association="DeCryptoModel.Store.FK_BlueTeamGame">
+      <End Role="BlueTeamSet" EntitySet="BlueTeamSet" />
+      <End Role="GameSet" EntitySet="GameSet" />
+    </AssociationSet>
+    <AssociationSet Name="FK_RedTeamGame" Association="DeCryptoModel.Store.FK_RedTeamGame">
+      <End Role="RedTeamSet" EntitySet="RedTeamSet" />
+      <End Role="GameSet" EntitySet="GameSet" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AccountBlueTeam_AccountSet" Association="DeCryptoModel.Store.FK_AccountBlueTeam_AccountSet">
+      <End Role="AccountSet" EntitySet="AccountSet" />
+      <End Role="AccountBlueTeam" EntitySet="AccountBlueTeam" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AccountBlueTeam_BlueTeamSet" Association="DeCryptoModel.Store.FK_AccountBlueTeam_BlueTeamSet">
+      <End Role="BlueTeamSet" EntitySet="BlueTeamSet" />
+      <End Role="AccountBlueTeam" EntitySet="AccountBlueTeam" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AccountRedTeam_AccountSet" Association="DeCryptoModel.Store.FK_AccountRedTeam_AccountSet">
+      <End Role="AccountSet" EntitySet="AccountSet" />
+      <End Role="AccountRedTeam" EntitySet="AccountRedTeam" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AccountRedTeam_RedTeamSet" Association="DeCryptoModel.Store.FK_AccountRedTeam_RedTeamSet">
+      <End Role="RedTeamSet" EntitySet="RedTeamSet" />
+      <End Role="AccountRedTeam" EntitySet="AccountRedTeam" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="AccountSet">
+    <Key>
+      <PropertyRef Name="Nickname" />
+    </Key>
+    <Property Name="Nickname" Type="nvarchar" Nullable="false" MaxLength="20" />
+    <Property Name="Email" Type="nvarchar" Nullable="false" MaxLength="45" />
+    <Property Name="EmailVerify" Type="bit" Nullable="false" />
+    <Property Name="Password" Type="nvarchar" Nullable="false" MaxLength="45" />
+    <Property Name="FriendRequest_FriendRequestId" Type="int" Nullable="false" />
+    <Property Name="FriendRequest1_FriendRequestId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="BlueTeamSet">
+    <Key>
+      <PropertyRef Name="BlueTeamId" />
+    </Key>
+    <Property Name="BlueTeamId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+  </EntityType>
+  <EntityType Name="FriendList">
+    <Key>
+      <PropertyRef Name="Account2_Nickname" />
+      <PropertyRef Name="Account1_Nickname" />
+    </Key>
+    <Property Name="Account2_Nickname" Type="nvarchar" Nullable="false" MaxLength="20" />
+    <Property Name="Account1_Nickname" Type="nvarchar" Nullable="false" MaxLength="20" />
+    <Property Name="IsBlocked" Type="bit" Nullable="true" />
+    <Property Name="StartDate" Type="datetime" Nullable="true" />
+  </EntityType>
+  <EntityType Name="GameSet">
+    <Key>
+      <PropertyRef Name="GamesId" />
+    </Key>
+    <Property Name="GamesId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="WinnerTeam" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="RoundNumber" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="BlueTeam_BlueTeamId" Type="int" Nullable="false" />
+    <Property Name="RedTeam_RedTeamId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="RedTeamSet">
+    <Key>
+      <PropertyRef Name="RedTeamId" />
+    </Key>
+    <Property Name="RedTeamId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+  </EntityType>
+  <EntityType Name="UserSet">
+    <Key>
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="BirthDay" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Account_Nickname" Type="nvarchar" Nullable="false" MaxLength="20" />
+  </EntityType>
+  <EntityType Name="AccountBlueTeam">
+    <Key>
+      <PropertyRef Name="AccountSet_Nickname" />
+      <PropertyRef Name="BlueTeamSet_BlueTeamId" />
+    </Key>
+    <Property Name="AccountSet_Nickname" Type="nvarchar" Nullable="false" MaxLength="20" />
+    <Property Name="BlueTeamSet_BlueTeamId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="AccountRedTeam">
+    <Key>
+      <PropertyRef Name="AccountSet_Nickname" />
+      <PropertyRef Name="RedTeamSet_RedTeamId" />
+    </Key>
+    <Property Name="AccountSet_Nickname" Type="nvarchar" Nullable="false" MaxLength="20" />
+    <Property Name="RedTeamSet_RedTeamId" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_AccountAccount_Account">
+    <End Role="AccountSet" Type="DeCryptoModel.Store.AccountSet" Multiplicity="1" />
+    <End Role="FriendList" Type="DeCryptoModel.Store.FriendList" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AccountSet">
+        <PropertyRef Name="Nickname" />
+      </Principal>
+      <Dependent Role="FriendList">
+        <PropertyRef Name="Account2_Nickname" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AccountAccount_Account1">
+    <End Role="AccountSet" Type="DeCryptoModel.Store.AccountSet" Multiplicity="1" />
+    <End Role="FriendList" Type="DeCryptoModel.Store.FriendList" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AccountSet">
+        <PropertyRef Name="Nickname" />
+      </Principal>
+      <Dependent Role="FriendList">
+        <PropertyRef Name="Account1_Nickname" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserAccount">
+    <End Role="AccountSet" Type="DeCryptoModel.Store.AccountSet" Multiplicity="1" />
+    <End Role="UserSet" Type="DeCryptoModel.Store.UserSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AccountSet">
+        <PropertyRef Name="Nickname" />
+      </Principal>
+      <Dependent Role="UserSet">
+        <PropertyRef Name="Account_Nickname" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BlueTeamGame">
+    <End Role="BlueTeamSet" Type="DeCryptoModel.Store.BlueTeamSet" Multiplicity="1" />
+    <End Role="GameSet" Type="DeCryptoModel.Store.GameSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BlueTeamSet">
+        <PropertyRef Name="BlueTeamId" />
+      </Principal>
+      <Dependent Role="GameSet">
+        <PropertyRef Name="BlueTeam_BlueTeamId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_RedTeamGame">
+    <End Role="RedTeamSet" Type="DeCryptoModel.Store.RedTeamSet" Multiplicity="1" />
+    <End Role="GameSet" Type="DeCryptoModel.Store.GameSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="RedTeamSet">
+        <PropertyRef Name="RedTeamId" />
+      </Principal>
+      <Dependent Role="GameSet">
+        <PropertyRef Name="RedTeam_RedTeamId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AccountBlueTeam_AccountSet">
+    <End Role="AccountSet" Type="DeCryptoModel.Store.AccountSet" Multiplicity="1" />
+    <End Role="AccountBlueTeam" Type="DeCryptoModel.Store.AccountBlueTeam" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AccountSet">
+        <PropertyRef Name="Nickname" />
+      </Principal>
+      <Dependent Role="AccountBlueTeam">
+        <PropertyRef Name="AccountSet_Nickname" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AccountBlueTeam_BlueTeamSet">
+    <End Role="AccountBlueTeam" Type="DeCryptoModel.Store.AccountBlueTeam" Multiplicity="*" />
+    <End Role="BlueTeamSet" Type="DeCryptoModel.Store.BlueTeamSet" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="BlueTeamSet">
+        <PropertyRef Name="BlueTeamId" />
+      </Principal>
+      <Dependent Role="AccountBlueTeam">
+        <PropertyRef Name="BlueTeamSet_BlueTeamId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AccountRedTeam_AccountSet">
+    <End Role="AccountSet" Type="DeCryptoModel.Store.AccountSet" Multiplicity="1" />
+    <End Role="AccountRedTeam" Type="DeCryptoModel.Store.AccountRedTeam" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AccountSet">
+        <PropertyRef Name="Nickname" />
+      </Principal>
+      <Dependent Role="AccountRedTeam">
+        <PropertyRef Name="AccountSet_Nickname" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AccountRedTeam_RedTeamSet">
+    <End Role="AccountRedTeam" Type="DeCryptoModel.Store.AccountRedTeam" Multiplicity="*" />
+    <End Role="RedTeamSet" Type="DeCryptoModel.Store.RedTeamSet" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="RedTeamSet">
+        <PropertyRef Name="RedTeamId" />
+      </Principal>
+      <Dependent Role="AccountRedTeam">
+        <PropertyRef Name="RedTeamSet_RedTeamId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

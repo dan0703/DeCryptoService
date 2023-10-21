@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="DeCryptoModelStoreContainer" CdmEntityContainer="DeCryptoEntities">
+    <EntitySetMapping Name="AccountSet">
+      <EntityTypeMapping TypeName="IsTypeOf(DeCryptoModel.AccountSet)">
+        <MappingFragment StoreEntitySet="AccountSet">
+          <ScalarProperty Name="Nickname" ColumnName="Nickname" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="EmailVerify" ColumnName="EmailVerify" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="FriendRequest_FriendRequestId" ColumnName="FriendRequest_FriendRequestId" />
+          <ScalarProperty Name="FriendRequest1_FriendRequestId" ColumnName="FriendRequest1_FriendRequestId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BlueTeamSet">
+      <EntityTypeMapping TypeName="IsTypeOf(DeCryptoModel.BlueTeamSet)">
+        <MappingFragment StoreEntitySet="BlueTeamSet">
+          <ScalarProperty Name="BlueTeamId" ColumnName="BlueTeamId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FriendList">
+      <EntityTypeMapping TypeName="IsTypeOf(DeCryptoModel.FriendList)">
+        <MappingFragment StoreEntitySet="FriendList">
+          <ScalarProperty Name="Account2_Nickname" ColumnName="Account2_Nickname" />
+          <ScalarProperty Name="Account1_Nickname" ColumnName="Account1_Nickname" />
+          <ScalarProperty Name="IsBlocked" ColumnName="IsBlocked" />
+          <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="GameSet">
+      <EntityTypeMapping TypeName="IsTypeOf(DeCryptoModel.GameSet)">
+        <MappingFragment StoreEntitySet="GameSet">
+          <ScalarProperty Name="GamesId" ColumnName="GamesId" />
+          <ScalarProperty Name="WinnerTeam" ColumnName="WinnerTeam" />
+          <ScalarProperty Name="RoundNumber" ColumnName="RoundNumber" />
+          <ScalarProperty Name="BlueTeam_BlueTeamId" ColumnName="BlueTeam_BlueTeamId" />
+          <ScalarProperty Name="RedTeam_RedTeamId" ColumnName="RedTeam_RedTeamId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RedTeamSet">
+      <EntityTypeMapping TypeName="IsTypeOf(DeCryptoModel.RedTeamSet)">
+        <MappingFragment StoreEntitySet="RedTeamSet">
+          <ScalarProperty Name="RedTeamId" ColumnName="RedTeamId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserSet">
+      <EntityTypeMapping TypeName="IsTypeOf(DeCryptoModel.UserSet)">
+        <MappingFragment StoreEntitySet="UserSet">
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="BirthDay" ColumnName="BirthDay" />
+          <ScalarProperty Name="Account_Nickname" ColumnName="Account_Nickname" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="AccountBlueTeam" TypeName="DeCryptoModel.AccountBlueTeam" StoreEntitySet="AccountBlueTeam">
+      <EndProperty Name="AccountSet">
+        <ScalarProperty Name="Nickname" ColumnName="AccountSet_Nickname" />
+      </EndProperty>
+      <EndProperty Name="BlueTeamSet">
+        <ScalarProperty Name="BlueTeamId" ColumnName="BlueTeamSet_BlueTeamId" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="AccountRedTeam" TypeName="DeCryptoModel.AccountRedTeam" StoreEntitySet="AccountRedTeam">
+      <EndProperty Name="AccountSet">
+        <ScalarProperty Name="Nickname" ColumnName="AccountSet_Nickname" />
+      </EndProperty>
+      <EndProperty Name="RedTeamSet">
+        <ScalarProperty Name="RedTeamId" ColumnName="RedTeamSet_RedTeamId" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping>

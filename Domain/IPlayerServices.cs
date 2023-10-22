@@ -13,11 +13,6 @@ namespace Domain
     {
         [OperationContract]
         bool RegisterPlayer(User user);
-
-        [OperationContract]
-        void AddPlayer(string nickname);
-
-
     }
     [ServiceContract(CallbackContract =typeof(IPlayerServicesCallback))]
     public interface IPlayerServicesCallback

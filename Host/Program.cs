@@ -14,21 +14,10 @@ namespace Host
         {
             using (ServiceHost host = new ServiceHost(typeof(Implementations)))
             {
-
                 host.Open();
                 Console.WriteLine("Host is starting");
-                Implementations implementations = new Implementations();
-                if (implementations.SendToken("dansegura8863@gmail.com", "Importante", "buenas noches", 43))
-                {
-                    Console.WriteLine("Mensaje enviado");
-                }
-                else
-                {
-                    Console.WriteLine("Mensaje no enviado");
-                }
+                Console.ReadLine();
             }
-            Console.WriteLine("hola");
-           Console.ReadLine();
         }
     }
 }

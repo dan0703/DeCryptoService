@@ -16,24 +16,8 @@ using System.Configuration;
 
 namespace Service
 {
-    [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Multiple)]
     public partial class Implementations : IPlayerServices, IAccountServices
     {
-        private static readonly Dictionary<string, IPlayerServicesCallback> players = new Dictionary<string, IPlayerServicesCallback>();
-
-        public void AddPlayer(string nickname)
-        {
-            if (players.ContainsKey(nickname))
-            {
-                players.Add(nickname, OperationContext.Current.GetCallbackChannel<IPlayerServicesCallback>());
-                foreach (var player in players)
-                {
-                    Console.WriteLine(player);
-                    players[player.Key].GetPlayers(GetPlayersList());
-                }
-                
-            }
-        }
 
         private List<User> GetPlayersList()
         {
@@ -50,30 +34,36 @@ namespace Service
             return list;
         }
 
-        public bool Login(Account account)
+        public Account Login(Account account)
         {
             if(account == null)
             {
-                return false;
+                return null;
             }
             else
             {
                 using (DeCryptoEntities context = new DeCryptoEntities())
                 {
-                    var foundUser = context.AccountSet.Where(accountSet => accountSet.Email == account.email).FirstOrDefault();
-                    if (foundUser == default)
+                    var foundAccount = context.AccountSet.Where(accountSet => accountSet.Email == account.email).FirstOrDefault();
+                    if (foundAccount == default)
                     {
-                        return false;
+                        return null;
                     }
                     else
                     {
-                        if (account.password == foundUser.Password)
+                        if (account.password == foundAccount.Password)
                         {
-                            return true;
+                            Account newAccount = new Account()
+                            {
+                                email = foundAccount.Email,
+                                emailVerify = foundAccount.EmailVerify,
+                                nickname = foundAccount.Nickname
+                            };
+                            return  newAccount;
                         }
                         else
                         {
-                            return false;
+                            return null;
                         }
                     }
                 }
@@ -151,8 +141,7 @@ namespace Service
         }
 
         public bool SendToken(string email, string title, string message, int code)
-        {
-            
+        {            
             string smtpServer = ConfigurationSettings.AppSettings["SMTP_SERVER"];
             int port = int.Parse(ConfigurationSettings.AppSettings["PORT"]);
             string emailAddress = ConfigurationSettings.AppSettings["EMAIL_ADDRESS"];
@@ -183,8 +172,71 @@ namespace Service
         }
     }
 
-    public partial class Implementations : IPlayerServices
+    [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Multiple)]
+    public partial class Implementations : IJoinToGame
     {
+        private static readonly List<int> rooms = new List<int>();
+        private static readonly Dictionary<string, int> roomPlayers = new Dictionary<string, int>();
+        private static readonly Dictionary<int, BlueTeam> bluePlayers = new Dictionary<int, BlueTeam>();
+        private static readonly Dictionary<int, RedTeam> redPlayers = new Dictionary<int, RedTeam>();
+        private static readonly Dictionary<string, IJoinToGameCallback> players = new Dictionary<string, IJoinToGameCallback>();
+        private static readonly Dictionary<string, byte[]> profilePictures = new Dictionary<string, byte[]>();
 
-    } 
+
+
+        public int CreateRoom()
+        {
+            var random = new Random();
+            var lowerBound = 1000;
+            var upperBound = 9999;
+            int code = random.Next(lowerBound, upperBound);
+            while (rooms.Contains(code))
+            {
+                code = random.Next(lowerBound, upperBound);
+            };
+            rooms.Add(code);
+            bluePlayers.Add(code, new BlueTeam());
+            redPlayers.Add(code, new RedTeam());
+            return code;
+        }
+
+        public void JoinToRoom(int code, string nickname)
+        {
+            if (!roomPlayers.ContainsKey(nickname))
+            {
+                roomPlayers.Add(nickname, code);
+                players.Add(nickname, OperationContext.Current.GetCallbackChannel<IJoinToGameCallback>());
+                SetPlayers(code);
+
+            }
+        }
+
+        private void SetPlayers(int code)
+        {
+            var playersList = roomPlayers.Where(player => player.Value.Equals(code)).Select(player => player.Key).ToList();
+            Dictionary<string, byte[]> profiles = profilePictures;
+
+            foreach (var player in playersList)
+            {
+                Console.WriteLine("1");
+
+                if (!profilePictures.ContainsKey(player))
+                {
+                    profiles.Remove(player);
+                }
+            }
+            foreach (var player in playersList)
+            {
+                Console.WriteLine("1");
+
+                players[player].RecivePlayers(profiles);
+            }
+        }
+
+        public void LeaveRoom(string nickname, int code)
+        {
+            throw new NotImplementedException();
+        }
+
+    }
 }

@@ -17,7 +17,7 @@ namespace Domain
         bool RegisterAccount(Account account);
 
         [OperationContract]
-        bool Login(Account account);
+        Account Login(Account account);
 
         [OperationContract]
         bool SendToken(string email, string title, string message, int code);

@@ -1,0 +1,36 @@
+# Ignora archivos de configuración específicos de Visual Studio
+*.suo
+*.user
+
+# Ignora archivos de configuración de JetBrains Rider
+.idea/
+
+# Ignora archivos de registros
+*.log
+
+# Ignora archivos de caché
+.cache/
+
+# Ignora archivos de respaldo de editores de texto
+*~
+*.swp
+
+# Ignora archivos temporales de Windows
+Thumbs.db
+
+# Ignora archivos generados por compiladores
+bin/
+obj/
+*.exe
+*.dll
+
+# Ignora archivos generados por Maven
+target/
+
+# Ignora archivos generados por Visual Studio
+[Oo]bj/
+[Bb]in/
+
+# Ignora archivos de registro
+*.log
+

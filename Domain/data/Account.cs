@@ -30,6 +30,6 @@ namespace Domain.data
         public bool emailVerify {  get; set; }
 
         [DataMember]
-        public 
+        public byte[] profileImage { get; set; }
     }
 }

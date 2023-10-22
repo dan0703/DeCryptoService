@@ -17,7 +17,8 @@ namespace Domain.data
 
         public BlueTeam()
         {
-
+            nicknamePlayer1 = "Player3";
+            nicknamePlayer2 = "Player4";
         }
     }
 }

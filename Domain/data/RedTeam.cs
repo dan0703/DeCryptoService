@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Domain.data
 {
+    [DataContract]
     public class RedTeam
     {
         [DataMember]
@@ -16,7 +17,8 @@ namespace Domain.data
 
         public RedTeam()
         {
-
+            nicknamePlayer1 = "Player1";
+            nicknamePlayer2 = "Player2";
         }
     }
 }

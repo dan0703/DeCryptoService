@@ -194,7 +194,7 @@ namespace Service
             {
                 code = random.Next(lowerBound, upperBound);
             };
-            rooms.Add(code);
+            rooms.Add(code);                       
             bluePlayers.Add(code, new BlueTeam());
             redPlayers.Add(code, new RedTeam());
             return code;
@@ -205,36 +205,38 @@ namespace Service
             if (!roomPlayers.ContainsKey(nickname))
             {
                 roomPlayers.Add(nickname, code);
-                players.Add(nickname, OperationContext.Current.GetCallbackChannel<IJoinToGameCallback>());
-                SetPlayers(code);
+                players.Add(nickname, OperationContext.Current.GetCallbackChannel<IJoinToGameCallback>());                
             }
-            else
+            SetPlayers(code);
+            if (redPlayers.ContainsKey(code) && bluePlayers.ContainsKey(code))
             {
-                SetPlayers(code);
-            }
+                SetBlueteam(code, bluePlayers[code]);
+                SetRedteam(code, redPlayers[code]);
+            }            
         }
 
         private void SetPlayers(int code)
         {
-            var playersList = roomPlayers.Where(player => player.Value.Equals(code)).Select(player => player.Key).ToList();
-            Dictionary<string, byte[]> profiles = profilePictures;
-
+            var playersList = roomPlayers.Where(player => player.Value.Equals(code)).Select(player => player.Key).ToList();            
             foreach (var player in playersList)
             {
-                if (!profilePictures.ContainsKey(player))
-                {
-                    profiles.Remove(player);
-                }
-            }
-            foreach (var player in playersList)
-            {
-                players[player].RecivePlayers(profiles);
+                players[player].RecivePlayers(playersList);
             }
         }
 
-        public void LeaveRoom(string nickname, int code)
+        public void LeaveRoom(string nickname, int code, BlueTeam blueTeam, RedTeam redTeam)
         {
-            throw new NotImplementedException();
+            roomPlayers.Remove(nickname);
+            bluePlayers[code] = blueTeam;
+            redPlayers[code] = redTeam;
+            players.Remove(nickname);
+            if (!roomPlayers.ContainsValue(code))
+            {
+                rooms.Remove(code);
+                bluePlayers.Remove(code);
+                redPlayers.Remove(code);
+            }
+            SetPlayers(code);
         }
 
         public bool AllreadyExistRoom(int code)
@@ -246,6 +248,50 @@ namespace Service
             else
             {
                 return false;
+            }
+        }
+
+        public void joinToBlueTeam(BlueTeam blueTeam, int code)
+        {
+            if (bluePlayers.ContainsKey(code))
+            {
+                bluePlayers[code] = blueTeam;
+            }
+            else
+            {
+                bluePlayers.Add(code, blueTeam);
+            }
+            SetBlueteam(code, blueTeam);
+        }
+
+        public void joinToRedTeam(RedTeam redTeam, int code)
+        {
+            if (redPlayers.ContainsKey(code))
+            {
+                redPlayers[code] = redTeam;
+            }
+            else
+            {
+                redPlayers.Add(code, redTeam);
+            }
+            SetRedteam(code, redTeam);
+        }
+
+        private void SetBlueteam(int code, BlueTeam blueTeam)
+        {
+            var playersList = roomPlayers.Where(player => player.Value.Equals(code)).Select(player => player.Key).ToList();
+            foreach (var player in playersList)
+            {
+                players[player].ReciveBlueTeam(blueTeam);
+            }
+        }
+
+        private void SetRedteam(int code, RedTeam redTeam)
+        {
+            var playersList = roomPlayers.Where(player => player.Value.Equals(code)).Select(player => player.Key).ToList();
+            foreach (var player in playersList)
+            {
+                players[player].ReciveRedTeam(redTeam);
             }
         }
     }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
@@ -17,17 +18,29 @@ namespace Domain
         void JoinToRoom(int code, string nickname);
 
         [OperationContract]
-        void LeaveRoom(string nickname, int code);
+        void LeaveRoom(string nickname, int code, BlueTeam blueTeam, RedTeam redTeam);
 
         [OperationContract]
         bool AllreadyExistRoom(int code);
+
+        [OperationContract(IsOneWay = true)]
+        void joinToBlueTeam(BlueTeam blueTeam, int code);
+
+        [OperationContract (IsOneWay = true)]
+        void joinToRedTeam(RedTeam redTeam, int code);
     }
 
     [ServiceContract]
     public interface IJoinToGameCallback
     {
         [OperationContract]
-        void RecivePlayers(Dictionary<string, byte[]> profiles);
+        void RecivePlayers(List<string> playerList);
+
+        [OperationContract]
+        void ReciveBlueTeam(BlueTeam blueTeam);
+
+        [OperationContract]
+        void ReciveRedTeam(RedTeam redTeam);
 
     }
 }

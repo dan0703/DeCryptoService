@@ -21,5 +21,7 @@ namespace Domain
 
         [OperationContract]
         bool SendToken(string email, string title, string message, int code);
+        [OperationContract]
+        bool VerifyEmail(Account account);
     }
 }

@@ -1,9 +1,7 @@
 {
   "ExpandedNodes": [
-    "",
-    "\\Host",
-    "\\Service"
+    ""
   ],
-  "SelectedNode": "\\Service\\Implementations.cs",
+  "SelectedNode": "\\DecryptoService.sln",
   "PreviewInSolutionExplorer": false
 }

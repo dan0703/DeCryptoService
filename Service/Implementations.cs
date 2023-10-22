@@ -170,6 +170,32 @@ namespace Service
                 return false;
             }
         }
+
+        public bool VerifyEmail(Account account)
+        {
+            try
+            {
+                using (DeCryptoEntities context = new DeCryptoEntities())
+                {
+                    var foundAccount = context.AccountSet.Where(accountSet => accountSet.Email == account.email).FirstOrDefault();
+                    if (foundAccount == default)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        foundAccount.EmailVerify = true;
+                        context.SaveChanges();
+                        return true;
+                    }
+                }
+            }
+            catch (DbUpdateException ex)
+            {
+                //Mandar al logger
+                return false;
+            }
+        }
     }
 
     [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Multiple)]

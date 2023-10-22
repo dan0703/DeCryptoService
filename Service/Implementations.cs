@@ -218,8 +218,6 @@ namespace Service
 
             foreach (var player in playersList)
             {
-                Console.WriteLine("1");
-
                 if (!profilePictures.ContainsKey(player))
                 {
                     profiles.Remove(player);
@@ -227,8 +225,6 @@ namespace Service
             }
             foreach (var player in playersList)
             {
-                Console.WriteLine("1");
-
                 players[player].RecivePlayers(profiles);
             }
         }

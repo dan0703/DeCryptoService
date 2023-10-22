@@ -18,6 +18,9 @@ namespace Domain
 
         [OperationContract]
         void LeaveRoom(string nickname, int code);
+
+        [OperationContract]
+        bool AllreadyExistRoom(int code);
     }
 
     [ServiceContract]

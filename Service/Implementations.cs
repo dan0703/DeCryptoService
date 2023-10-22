@@ -207,7 +207,10 @@ namespace Service
                 roomPlayers.Add(nickname, code);
                 players.Add(nickname, OperationContext.Current.GetCallbackChannel<IJoinToGameCallback>());
                 SetPlayers(code);
-
+            }
+            else
+            {
+                SetPlayers(code);
             }
         }
 
@@ -234,5 +237,16 @@ namespace Service
             throw new NotImplementedException();
         }
 
+        public bool AllreadyExistRoom(int code)
+        {
+            if (rooms.Contains(code))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

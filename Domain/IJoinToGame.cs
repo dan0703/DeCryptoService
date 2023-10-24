@@ -15,7 +15,7 @@ namespace Domain
         int CreateRoom();
 
         [OperationContract(IsOneWay = true)]
-        void JoinToRoom(int code, string nickname);
+        void JoinToRoom(int code, string nickname, byte[] profilePicture);
 
         [OperationContract]
         void LeaveRoom(string nickname, int code, BlueTeam blueTeam, RedTeam redTeam);
@@ -24,23 +24,28 @@ namespace Domain
         bool AllreadyExistRoom(int code);
 
         [OperationContract(IsOneWay = true)]
-        void joinToBlueTeam(BlueTeam blueTeam, int code);
+        void JoinToBlueTeam(BlueTeam blueTeam, int code);
 
         [OperationContract (IsOneWay = true)]
-        void joinToRedTeam(RedTeam redTeam, int code);
+        void JoinToRedTeam(RedTeam redTeam, int code);
+
+        [OperationContract]
+        void JoinToGame(string nickname);
+
+        [OperationContract]
+        void LeaveGame(string nickname);
     }
 
     [ServiceContract]
     public interface IJoinToGameCallback
     {
         [OperationContract]
-        void RecivePlayers(List<string> playerList);
+        void RecivePlayers(Dictionary<string, byte[]> profiles);
 
         [OperationContract]
         void ReciveBlueTeam(BlueTeam blueTeam);
 
         [OperationContract]
         void ReciveRedTeam(RedTeam redTeam);
-
     }
 }

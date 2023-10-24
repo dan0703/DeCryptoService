@@ -226,12 +226,11 @@ namespace Service
             return code;
         }
 
-        public void JoinToRoom(int code, string nickname)
+        public void JoinToRoom(int code, string nickname, byte[] profilePicture)
         {
             if (!roomPlayers.ContainsKey(nickname))
             {
                 roomPlayers.Add(nickname, code);
-                players.Add(nickname, OperationContext.Current.GetCallbackChannel<IJoinToGameCallback>());                
             }
             SetPlayers(code);
             if (redPlayers.ContainsKey(code) && bluePlayers.ContainsKey(code))
@@ -243,10 +242,19 @@ namespace Service
 
         private void SetPlayers(int code)
         {
-            var playersList = roomPlayers.Where(player => player.Value.Equals(code)).Select(player => player.Key).ToList();            
+            var playersList = roomPlayers.Where(player => player.Value.Equals(code)).Select(player => player.Key).ToList();
+            Dictionary<string, byte[]> profiles = profilePictures;
+
             foreach (var player in playersList)
             {
-                players[player].RecivePlayers(playersList);
+                if (!profiles.ContainsKey(player))
+                {
+                    profiles.Remove(player);
+                }
+            }
+            foreach (var player in playersList)
+            {
+                players[player].RecivePlayers(profiles);
             }
         }
 
@@ -255,7 +263,6 @@ namespace Service
             roomPlayers.Remove(nickname);
             bluePlayers[code] = blueTeam;
             redPlayers[code] = redTeam;
-            players.Remove(nickname);
             if (!roomPlayers.ContainsValue(code))
             {
                 rooms.Remove(code);
@@ -277,7 +284,7 @@ namespace Service
             }
         }
 
-        public void joinToBlueTeam(BlueTeam blueTeam, int code)
+        public void JoinToBlueTeam(BlueTeam blueTeam, int code)
         {
             if (bluePlayers.ContainsKey(code))
             {
@@ -290,7 +297,7 @@ namespace Service
             SetBlueteam(code, blueTeam);
         }
 
-        public void joinToRedTeam(RedTeam redTeam, int code)
+        public void JoinToRedTeam(RedTeam redTeam, int code)
         {
             if (redPlayers.ContainsKey(code))
             {
@@ -318,6 +325,24 @@ namespace Service
             foreach (var player in playersList)
             {
                 players[player].ReciveRedTeam(redTeam);
+            }
+        }
+
+        public void JoinToGame(string nickname)
+        {
+            if (!players.ContainsKey(nickname))
+            {
+                players.Add(nickname, OperationContext.Current.GetCallbackChannel<IJoinToGameCallback>());
+                profilePictures.Add(nickname, new byte[1]);
+            }            
+        }
+
+        public void LeaveGame(string nickname)
+        {
+            if (players.ContainsKey(nickname))
+            {
+                players.Remove(nickname);
+                profilePictures.Remove(nickname);
             }
         }
     }

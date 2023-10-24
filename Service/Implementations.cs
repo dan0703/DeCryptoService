@@ -207,8 +207,7 @@ namespace Service
         private static readonly Dictionary<int, RedTeam> redPlayers = new Dictionary<int, RedTeam>();
         private static readonly Dictionary<string, IJoinToGameCallback> players = new Dictionary<string, IJoinToGameCallback>();
         private static readonly Dictionary<string, byte[]> profilePictures = new Dictionary<string, byte[]>();
-
-
+        private static readonly Dictionary<int, List<ChatMessage>> chatMessages = new Dictionary<int, List<ChatMessage>>();
 
         public int CreateRoom()
         {

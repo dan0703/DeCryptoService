@@ -45,11 +45,13 @@
   <ItemGroup>
     <Compile Include="data\Account.cs" />
     <Compile Include="data\BlueTeam.cs" />
+    <Compile Include="data\ChatMessage.cs" />
     <Compile Include="data\GameConfigurations.cs" />
     <Compile Include="data\RedTeam.cs" />
     <Compile Include="data\Room.cs" />
     <Compile Include="data\User.cs" />
     <Compile Include="IAccountServices.cs" />
+    <Compile Include="IChatMessage.cs" />
     <Compile Include="IJoinToGame.cs" />
     <Compile Include="IPlayerServices.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

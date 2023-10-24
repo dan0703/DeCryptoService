@@ -226,7 +226,7 @@ namespace Service
             return code;
         }
 
-        public void JoinToRoom(int code, string nickname, byte[] profilePicture)
+        public void JoinToRoom(int code, string nickname)
         {
             if (!roomPlayers.ContainsKey(nickname))
             {
@@ -328,12 +328,12 @@ namespace Service
             }
         }
 
-        public void JoinToGame(string nickname)
+        public void JoinToGame(string nickname, byte[] profilePicture)
         {
             if (!players.ContainsKey(nickname))
             {
                 players.Add(nickname, OperationContext.Current.GetCallbackChannel<IJoinToGameCallback>());
-                profilePictures.Add(nickname, new byte[1]);
+                profilePictures.Add(nickname, profilePicture);
             }            
         }
 

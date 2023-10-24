@@ -15,7 +15,7 @@ namespace Domain
         int CreateRoom();
 
         [OperationContract(IsOneWay = true)]
-        void JoinToRoom(int code, string nickname, byte[] profilePicture);
+        void JoinToRoom(int code, string nickname);
 
         [OperationContract]
         void LeaveRoom(string nickname, int code, BlueTeam blueTeam, RedTeam redTeam);
@@ -30,7 +30,7 @@ namespace Domain
         void JoinToRedTeam(RedTeam redTeam, int code);
 
         [OperationContract]
-        void JoinToGame(string nickname);
+        void JoinToGame(string nickname, byte[] profilePicture);
 
         [OperationContract]
         void LeaveGame(string nickname);

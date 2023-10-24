@@ -247,11 +247,13 @@ namespace Service
 
             foreach (var player in playersList)
             {
+                Console.WriteLine(player);
                 if (!profiles.ContainsKey(player))
                 {
                     profiles.Remove(player);
                 }
             }
+            Console.WriteLine("\n");
             foreach (var player in playersList)
             {
                 players[player].RecivePlayers(profiles);
@@ -269,7 +271,10 @@ namespace Service
                 bluePlayers.Remove(code);
                 redPlayers.Remove(code);
             }
-            SetPlayers(code);
+            else
+            {
+                SetPlayers(code);
+            }
         }
 
         public bool AllreadyExistRoom(int code)

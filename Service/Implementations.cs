@@ -252,7 +252,6 @@ namespace Service
                     profiles.Remove(player);
                 }
             }
-            Console.WriteLine("\n");
             foreach (var player in playersList)
             {
                 players[player].RecivePlayers(profiles);

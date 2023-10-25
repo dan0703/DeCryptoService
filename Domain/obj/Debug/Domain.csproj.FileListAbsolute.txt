@@ -16,3 +16,9 @@ C:\Users\danse\Desktop\DecryptoService\DecryptoService\Domain\obj\Debug\Domain.c
 C:\Users\danse\Desktop\DecryptoService\DecryptoService\Domain\obj\Debug\Domain.csproj.CoreCompileInputs.cache
 C:\Users\danse\Desktop\DecryptoService\DecryptoService\Domain\obj\Debug\Domain.dll
 C:\Users\danse\Desktop\DecryptoService\DecryptoService\Domain\obj\Debug\Domain.pdb
+C:\Users\Sujey\source\repos\DeCryptoService\Domain\bin\Debug\Domain.dll
+C:\Users\Sujey\source\repos\DeCryptoService\Domain\bin\Debug\Domain.pdb
+C:\Users\Sujey\source\repos\DeCryptoService\Domain\obj\Debug\Domain.csproj.AssemblyReference.cache
+C:\Users\Sujey\source\repos\DeCryptoService\Domain\obj\Debug\Domain.csproj.CoreCompileInputs.cache
+C:\Users\Sujey\source\repos\DeCryptoService\Domain\obj\Debug\Domain.dll
+C:\Users\Sujey\source\repos\DeCryptoService\Domain\obj\Debug\Domain.pdb

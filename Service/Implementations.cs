@@ -348,5 +348,17 @@ namespace Service
                 profilePictures.Remove(nickname);
             }
         }
+
+        public bool IsFullRoom(int code)
+        {
+            int amountPlayers = roomPlayers.Where(player => player.Value.Equals(code)).Select(player => player.Key).Count();
+            if (amountPlayers >= 4) {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

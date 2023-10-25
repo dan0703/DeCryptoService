@@ -34,6 +34,8 @@ namespace Domain
 
         [OperationContract]
         void LeaveGame(string nickname);
+        [OperationContract]
+        bool IsFullRoom(int code);
     }
 
     [ServiceContract]

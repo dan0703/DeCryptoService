@@ -199,7 +199,7 @@ namespace Service
     }
 
     [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Multiple)]
-    public partial class Implementations : IJoinToGame
+    public partial class Implementations : IJoinToGame, IChatMessage
     {
         private static readonly List<int> rooms = new List<int>();
         private static readonly Dictionary<string, int> roomPlayers = new Dictionary<string, int>();
@@ -207,7 +207,8 @@ namespace Service
         private static readonly Dictionary<int, RedTeam> redPlayers = new Dictionary<int, RedTeam>();
         private static readonly Dictionary<string, IJoinToGameCallback> players = new Dictionary<string, IJoinToGameCallback>();
         private static readonly Dictionary<string, byte[]> profilePictures = new Dictionary<string, byte[]>();
-        private static readonly Dictionary<int, List<ChatMessage>> chatMessages = new Dictionary<int, List<ChatMessage>>();
+        private static readonly Dictionary<int, List<ChatMessage>> roomMessages = new Dictionary<int, List<ChatMessage>>();
+        private static readonly Dictionary<string, IChatMessageCallback> messages = new Dictionary<string, IChatMessageCallback>();
 
         public int CreateRoom()
         {
@@ -358,6 +359,51 @@ namespace Service
             else
             {
                 return false;
+            }
+        }
+
+        public void SendMessage(ChatMessage chatMessage, int code)
+        {
+            if (roomMessages.ContainsKey(code))
+            {
+                roomMessages[code].Add(chatMessage);
+            }
+            else
+            {
+                roomMessages.Add(code, new List<ChatMessage> { chatMessage });
+            }
+        }
+
+        public void JoinChat(string nickname, int code)
+        {
+            var messagesList = roomMessages.Where(listMessage => listMessage.Key.Equals(code)).Select(listMessage => listMessage.Value).FirstOrDefault();
+            
+            if (messagesList != null)
+            {
+                foreach (var message in messagesList)
+                {
+                    //messages[nickname].ReceiveChatMessages(message);
+                }
+            }
+        }
+
+        private void SetMessage(string nickname, int code)
+        {
+            var messagesList = roomMessages.Where(listMessage => listMessage.Key.Equals(code)).Select(listMessage => listMessage.Value);
+            var lastMessage = messagesList.LastOrDefault();
+            messages[nickname].ReceiveChatMessages(lastMessage);
+        }
+
+        public void LeaveChat(string nickname, int code)
+        {
+            if (messages.ContainsKey(nickname))
+            {
+                messages.Remove(nickname);
+            }
+
+            if (!roomPlayers.ContainsValue(code))
+            {
+                roomMessages.Remove(code);
             }
         }
     }

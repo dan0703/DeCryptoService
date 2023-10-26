@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace Domain
 {
+    [ServiceContract(CallbackContract = typeof(IChatMessageCallback))]
     public interface IChatMessage
     {
         [OperationContract]
@@ -19,10 +20,11 @@ namespace Domain
         [OperationContract]
         void LeaveChat(string nickname, int code);
     }
+
     [ServiceContract]
-    public interface IChatServicesCallback
+    public interface IChatMessageCallback
     {
         [OperationContract]
-        void GetChatMessages(List<ChatMessage> messages);
+        void ReceiveChatMessages(List<ChatMessage> messages);
     }
 }

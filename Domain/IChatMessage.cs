@@ -12,7 +12,7 @@ namespace Domain
     public interface IChatMessage
     {
         [OperationContract]
-        void SendMessage(ChatMessage chatMessage);
+        void SendMessage(ChatMessage chatMessage, int code);
 
         [OperationContract(IsOneWay = true)]
         void JoinChat(string nickname, int code);

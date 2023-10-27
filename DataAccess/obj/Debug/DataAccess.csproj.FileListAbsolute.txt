@@ -48,3 +48,15 @@ C:\Users\danse\Desktop\DecryptoService\DecryptoService\DataAccess\obj\Debug\Data
 C:\Users\danse\Desktop\DecryptoService\DecryptoService\DataAccess\obj\Debug\DataAccess.csproj.CopyComplete
 C:\Users\danse\Desktop\DecryptoService\DecryptoService\DataAccess\obj\Debug\DataAccess.exe
 C:\Users\danse\Desktop\DecryptoService\DecryptoService\DataAccess\obj\Debug\DataAccess.pdb
+C:\Users\Sujey\source\repos\DeCryptoService\DataAccess\bin\Debug\DataAccess.exe.config
+C:\Users\Sujey\source\repos\DeCryptoService\DataAccess\bin\Debug\DataAccess.exe
+C:\Users\Sujey\source\repos\DeCryptoService\DataAccess\bin\Debug\DataAccess.pdb
+C:\Users\Sujey\source\repos\DeCryptoService\DataAccess\bin\Debug\EntityFramework.dll
+C:\Users\Sujey\source\repos\DeCryptoService\DataAccess\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\Sujey\source\repos\DeCryptoService\DataAccess\bin\Debug\EntityFramework.xml
+C:\Users\Sujey\source\repos\DeCryptoService\DataAccess\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\Sujey\source\repos\DeCryptoService\DataAccess\obj\Debug\DataAccess.csproj.AssemblyReference.cache
+C:\Users\Sujey\source\repos\DeCryptoService\DataAccess\obj\Debug\DataAccess.csproj.CoreCompileInputs.cache
+C:\Users\Sujey\source\repos\DeCryptoService\DataAccess\obj\Debug\DataAccess.csproj.CopyComplete
+C:\Users\Sujey\source\repos\DeCryptoService\DataAccess\obj\Debug\DataAccess.exe
+C:\Users\Sujey\source\repos\DeCryptoService\DataAccess\obj\Debug\DataAccess.pdb

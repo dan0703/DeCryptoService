@@ -372,26 +372,40 @@ namespace Service
             {
                 roomMessages.Add(code, new List<ChatMessage> { chatMessage });
             }
+            SetMessage(code);
         }
 
         public void JoinChat(string nickname, int code)
         {
             var messagesList = roomMessages.Where(listMessage => listMessage.Key.Equals(code)).Select(listMessage => listMessage.Value).FirstOrDefault();
-            
+
             if (messagesList != null)
             {
-                foreach (var message in messagesList)
+                if (roomPlayers.ContainsKey(nickname))
                 {
-                    //messages[nickname].ReceiveChatMessages(message);
+                    messages[nickname].ReceiveChatMessages(messagesList);
                 }
             }
         }
 
-        private void SetMessage(string nickname, int code)
+        private void SetMessage(int code)
         {
-            var messagesList = roomMessages.Where(listMessage => listMessage.Key.Equals(code)).Select(listMessage => listMessage.Value);
-            var lastMessage = messagesList.LastOrDefault();
-            messages[nickname].ReceiveChatMessages(lastMessage);
+            var messagesList = roomMessages.Where(listMessage => listMessage.Key.Equals(code)).Select(listMessage => listMessage.Value).FirstOrDefault();
+            
+            if (messagesList != null)
+            {
+                var lastMessage = messagesList.LastOrDefault();
+                List<ChatMessage> lastMessageList = new List<ChatMessage>() { lastMessage };
+                
+                if (lastMessage != null)
+                {
+                    var playersList = roomPlayers.Where(listPlayers =>listPlayers.Key.Equals(code)).Select(listPlayers => listPlayers.Key).ToList();
+                    foreach (var player in playersList)
+                    {
+                        messages[player].ReceiveChatMessages(lastMessageList);
+                    }
+                }
+            }
         }
 
         public void LeaveChat(string nickname, int code)

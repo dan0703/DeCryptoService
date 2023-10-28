@@ -11,7 +11,7 @@ namespace Domain
     [ServiceContract(CallbackContract = typeof(IChatMessageCallback))]
     public interface IChatMessage
     {
-        [OperationContract]
+        [OperationContract(IsOneWay = true)]
         void SendMessage(ChatMessage chatMessage, int code);
 
         [OperationContract(IsOneWay = true)]

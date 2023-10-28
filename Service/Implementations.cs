@@ -364,11 +364,11 @@ namespace Service
 
         public void SendMessage(ChatMessage chatMessage, int code)
         {
-            List<ChatMessage> chatMessagesList = GetChatMessages(code);
+            var chatMessagesList = GetChatMessages(code);
 
             if (chatMessagesList != null)
             {
-                chatMessagesList.Add(chatMessage);
+                roomMessages[code].Add(chatMessage);
                 SetMessage(code);
             }
         }
@@ -392,22 +392,14 @@ namespace Service
         private void SetMessage(int code)
         {
             var playersInChat = roomPlayers.Where(player => player.Value.Equals(code)).Select(player => player.Key).ToList();
+
             foreach (var player in playersInChat)
             {
                 if (chatPlayers.ContainsKey(player))
                 {
-                    var chatMessagesList = GetChatMessages(code);
-                    if (chatMessagesList != null)
-                    {
-                        var lastMessage = chatMessagesList.LastOrDefault();
-                        if (lastMessage != null)
-                        {
-                            var lastMessageList = new List<ChatMessage>() { lastMessage };
-                            Console.WriteLine("número de mensajes" + lastMessageList.Count);
-                            Console.WriteLine("número de persoma en chat" + playersInChat.Count);
-                            chatPlayers[player].ReceiveChatMessages(lastMessageList);
-                        }
-                    }
+                    var chatMessagesList = GetChatMessages(code);                   
+                    Console.WriteLine("número de persoma en chat" + chatPlayers.Count);
+                    chatPlayers[player].ReceiveChatMessages(chatMessagesList);                    
                 }
             }
 
@@ -437,8 +429,7 @@ namespace Service
         {
             if (!roomMessages.ContainsKey(code))
             {
-                List<ChatMessage> chatMessages = new List<ChatMessage>();
-                roomMessages.Add(code, chatMessages);
+                roomMessages.Add(code, new List<ChatMessage>());
             }
             return roomMessages[code];
         }

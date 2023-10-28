@@ -208,7 +208,7 @@ namespace Service
         private static readonly Dictionary<string, IJoinToGameCallback> players = new Dictionary<string, IJoinToGameCallback>();
         private static readonly Dictionary<string, byte[]> profilePictures = new Dictionary<string, byte[]>();
         private static readonly Dictionary<int, List<ChatMessage>> roomMessages = new Dictionary<int, List<ChatMessage>>();
-        private static readonly Dictionary<string, IChatMessageCallback> messages = new Dictionary<string, IChatMessageCallback>();
+        private static readonly Dictionary<string, IChatMessageCallback> chatPlayers = new Dictionary<string, IChatMessageCallback>();
 
         public int CreateRoom()
         {
@@ -364,55 +364,90 @@ namespace Service
 
         public void SendMessage(ChatMessage chatMessage, int code)
         {
-            if (roomMessages.ContainsKey(code))
+            List<ChatMessage> chatMessagesList = GetChatMessages(code);
+
+            if (chatMessagesList != null)
             {
-                roomMessages[code].Add(chatMessage);
+                chatMessagesList.Add(chatMessage);
+                SetMessage(code);
             }
-            else
-            {
-                roomMessages.Add(code, new List<ChatMessage> { chatMessage });
-            }
-            SetMessage(code);
         }
 
         public void JoinChat(string nickname, int code)
         {
-            var messagesList = roomMessages.Where(listMessage => listMessage.Key.Equals(code)).Select(listMessage => listMessage.Value).FirstOrDefault();
-
-            if (messagesList != null)
+            if (!chatPlayers.ContainsKey(nickname))
             {
-                if (roomPlayers.ContainsKey(nickname))
-                {
-                    messages[nickname].ReceiveChatMessages(messagesList);
-                }
+                chatPlayers.Add(nickname, OperationContext.Current.GetCallbackChannel<IChatMessageCallback>());
+                Console.WriteLine(chatPlayers.Count);
+            }
+
+            var chatMessagesList = GetChatMessages(code);
+
+            if (chatMessagesList != null)
+            {
+                chatPlayers[nickname].ReceiveChatMessages(chatMessagesList);
             }
         }
 
         private void SetMessage(int code)
         {
-            var messagesList = roomMessages.Where(listMessage => listMessage.Key.Equals(code)).Select(listMessage => listMessage.Value).FirstOrDefault();
-            
-            if (messagesList != null)
+            var playersInChat = roomPlayers.Where(player => player.Value.Equals(code)).Select(player => player.Key).ToList();
+            foreach (var player in playersInChat)
             {
-                var lastMessage = messagesList.LastOrDefault();
-                List<ChatMessage> lastMessageList = new List<ChatMessage>() { lastMessage };
-                
-                if (lastMessage != null)
+                if (chatPlayers.ContainsKey(player))
                 {
-                    var playersList = roomPlayers.Where(listPlayers =>listPlayers.Key.Equals(code)).Select(listPlayers => listPlayers.Key).ToList();
-                    foreach (var player in playersList)
+                    var chatMessagesList = GetChatMessages(code);
+                    if (chatMessagesList != null)
                     {
-                        messages[player].ReceiveChatMessages(lastMessageList);
+                        var lastMessage = chatMessagesList.LastOrDefault();
+                        if (lastMessage != null)
+                        {
+                            var lastMessageList = new List<ChatMessage>() { lastMessage };
+                            Console.WriteLine("número de mensajes" + lastMessageList.Count);
+                            Console.WriteLine("número de persoma en chat" + playersInChat.Count);
+                            chatPlayers[player].ReceiveChatMessages(lastMessageList);
+                        }
                     }
                 }
             }
+
+            /*
+            foreach (var player in roomPlayers) {
+                string nickname = player.Key;
+                if (chatPlayers.ContainsKey(nickname))
+                {
+                    var chatMessagesList = GetChatMessages(code);
+                    if (chatMessagesList != null)
+                    {
+                        var lastMessage = chatMessagesList.LastOrDefault();
+                        if (lastMessage != null)
+                        {
+                            var lastMessageList = new List<ChatMessage>() { lastMessage };
+                            Console.WriteLine("número de mensajes" + lastMessageList.Count);
+                            chatPlayers[nickname].ReceiveChatMessages(lastMessageList);
+                        }
+                    }
+                    
+                }
+            }
+            */
+        }
+
+        public List<ChatMessage> GetChatMessages(int code)
+        {
+            if (!roomMessages.ContainsKey(code))
+            {
+                List<ChatMessage> chatMessages = new List<ChatMessage>();
+                roomMessages.Add(code, chatMessages);
+            }
+            return roomMessages[code];
         }
 
         public void LeaveChat(string nickname, int code)
         {
-            if (messages.ContainsKey(nickname))
+            if (chatPlayers.ContainsKey(nickname))
             {
-                messages.Remove(nickname);
+                chatPlayers.Remove(nickname);
             }
 
             if (!roomPlayers.ContainsValue(code))

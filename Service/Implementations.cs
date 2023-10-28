@@ -247,7 +247,6 @@ namespace Service
 
             foreach (var player in playersList)
             {
-                Console.WriteLine(player);
                 if (!profiles.ContainsKey(player))
                 {
                     profiles.Remove(player);
@@ -378,7 +377,6 @@ namespace Service
             if (!chatPlayers.ContainsKey(nickname))
             {
                 chatPlayers.Add(nickname, OperationContext.Current.GetCallbackChannel<IChatMessageCallback>());
-                Console.WriteLine(chatPlayers.Count);
             }
 
             var chatMessagesList = GetChatMessages(code);
@@ -398,31 +396,9 @@ namespace Service
                 if (chatPlayers.ContainsKey(player))
                 {
                     var chatMessagesList = GetChatMessages(code);                   
-                    Console.WriteLine("número de persoma en chat" + chatPlayers.Count);
                     chatPlayers[player].ReceiveChatMessages(chatMessagesList);                    
                 }
             }
-
-            /*
-            foreach (var player in roomPlayers) {
-                string nickname = player.Key;
-                if (chatPlayers.ContainsKey(nickname))
-                {
-                    var chatMessagesList = GetChatMessages(code);
-                    if (chatMessagesList != null)
-                    {
-                        var lastMessage = chatMessagesList.LastOrDefault();
-                        if (lastMessage != null)
-                        {
-                            var lastMessageList = new List<ChatMessage>() { lastMessage };
-                            Console.WriteLine("número de mensajes" + lastMessageList.Count);
-                            chatPlayers[nickname].ReceiveChatMessages(lastMessageList);
-                        }
-                    }
-                    
-                }
-            }
-            */
         }
 
         public List<ChatMessage> GetChatMessages(int code)

@@ -23,5 +23,9 @@ namespace Domain
         bool SendToken(string email, string title, string message, int code);
         [OperationContract]
         bool VerifyEmail(Account account);
+        [OperationContract]
+        bool ChangePassword(Account account, string newPassword);
+        [OperationContract]
+        bool CurrentPassword(Account account, string currentPasswor);
     }
 }

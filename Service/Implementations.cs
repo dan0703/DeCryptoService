@@ -13,6 +13,7 @@ using System.ServiceModel;
 using System.Net.Mail;
 using System.Net;
 using System.Configuration;
+using System.Security.Principal;
 
 namespace Service
 {
@@ -22,7 +23,7 @@ namespace Service
         private List<User> GetPlayersList()
         {
             var list = new List<User>();
-            foreach(var player in players)
+            foreach (var player in players)
             {
                 var newPlayer = new User()
                 {
@@ -36,7 +37,7 @@ namespace Service
 
         public Account Login(Account account)
         {
-            if(account == null)
+            if (account == null)
             {
                 return null;
             }
@@ -59,7 +60,7 @@ namespace Service
                                 emailVerify = foundAccount.EmailVerify,
                                 nickname = foundAccount.Nickname
                             };
-                            return  newAccount;
+                            return newAccount;
                         }
                         else
                         {
@@ -85,14 +86,15 @@ namespace Service
                         Nickname = account.nickname,
                         Email = account.email,
                         EmailVerify = account.emailVerify,
-                        Password = account.password                        
+                        Password = account.password
                     };
                     try
                     {
                         context.AccountSet.Add(newAccount);
                         context.SaveChanges();
                         return true;
-                    }catch (DbEntityValidationException ex)
+                    }
+                    catch (DbEntityValidationException ex)
                     {
                         foreach (var entityValidationError in ex.EntityValidationErrors)
                         {
@@ -110,9 +112,9 @@ namespace Service
 
         public bool RegisterPlayer(User user)
         {
-            if(user == null) 
-            { 
-                return false; 
+            if (user == null)
+            {
+                return false;
             }
             else
             {
@@ -131,7 +133,8 @@ namespace Service
                         context.SaveChanges();
                         return true;
 
-                    }catch(DbUpdateException ex)
+                    }
+                    catch (DbUpdateException ex)
                     {
                         //mandar exepcion al logger
                         return false;
@@ -141,7 +144,7 @@ namespace Service
         }
 
         public bool SendToken(string email, string title, string message, int code)
-        {            
+        {
             string smtpServer = ConfigurationSettings.AppSettings["SMTP_SERVER"];
             int port = int.Parse(ConfigurationSettings.AppSettings["PORT"]);
             string emailAddress = ConfigurationSettings.AppSettings["EMAIL_ADDRESS"];
@@ -196,7 +199,63 @@ namespace Service
                 return false;
             }
         }
+        public bool CurrentPassword(Account account, string currentPassword)
+        {
+            try
+            {
+                using (DeCryptoEntities context = new DeCryptoEntities()){
+                    var foundAccount = context.AccountSet.Where(accountSet => accountSet.Email == account.email).FirstOrDefault();
+                    if (foundAccount == default)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        if (foundAccount.Password == currentPassword)
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                }
+            } catch (Exception ex)
+            {
+                //enviar a logger
+                return false;
+            }
+        }
+
+        public bool ChangePassword(Account account, string newPassword)
+        {
+            try
+            {
+                using (DeCryptoEntities context = new DeCryptoEntities())
+                {
+                    var foundAccount = context.AccountSet.Where(accountSet => accountSet.Email == account.email).FirstOrDefault();
+                    if (foundAccount == default)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        foundAccount.Password = newPassword;
+                        context.SaveChanges();
+                        return true;
+                    }
+                }
+            }
+            catch (DbUpdateException ex)
+            {
+                //Mandar al logger
+                return false;
+            }
+        }
     }
+
+
 
     [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Multiple)]
     public partial class Implementations : IJoinToGame, IChatMessage
@@ -220,7 +279,7 @@ namespace Service
             {
                 code = random.Next(lowerBound, upperBound);
             };
-            rooms.Add(code);                       
+            rooms.Add(code);
             bluePlayers.Add(code, new BlueTeam());
             redPlayers.Add(code, new RedTeam());
             return code;
@@ -237,7 +296,7 @@ namespace Service
             {
                 SetBlueteam(code, bluePlayers[code]);
                 SetRedteam(code, redPlayers[code]);
-            }            
+            }
         }
 
         private void SetPlayers(int code)
@@ -337,7 +396,7 @@ namespace Service
             {
                 players.Add(nickname, OperationContext.Current.GetCallbackChannel<IJoinToGameCallback>());
                 profilePictures.Add(nickname, profilePicture);
-            }            
+            }
         }
 
         public void LeaveGame(string nickname)
@@ -352,7 +411,8 @@ namespace Service
         public bool IsFullRoom(int code)
         {
             int amountPlayers = roomPlayers.Where(player => player.Value.Equals(code)).Select(player => player.Key).Count();
-            if (amountPlayers >= 4) {
+            if (amountPlayers >= 4)
+            {
                 return true;
             }
             else
@@ -395,8 +455,8 @@ namespace Service
             {
                 if (chatPlayers.ContainsKey(player))
                 {
-                    var chatMessagesList = GetChatMessages(code);                   
-                    chatPlayers[player].ReceiveChatMessages(chatMessagesList);                    
+                    var chatMessagesList = GetChatMessages(code);
+                    chatPlayers[player].ReceiveChatMessages(chatMessagesList);
                 }
             }
         }

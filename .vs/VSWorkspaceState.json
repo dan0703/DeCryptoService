@@ -1,9 +1,10 @@
 {
   "ExpandedNodes": [
     "",
+    "\\DataAccess",
     "\\Domain",
     "\\Service"
   ],
-  "SelectedNode": "\\Service\\Implementations.cs",
+  "SelectedNode": "\\DataAccess\\packages.config",
   "PreviewInSolutionExplorer": false
 }

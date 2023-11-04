@@ -36,6 +36,15 @@ namespace Domain
         void LeaveGame(string nickname);
         [OperationContract]
         bool IsFullRoom(int code);
+
+        [OperationContract(IsOneWay = true)]
+        void SendFriendRequest(string senderNickname, string recipientNickname);
+
+        [OperationContract]
+        Dictionary<string, byte[]> GetFriendList(string nickname);
+
+        [OperationContract]
+        bool AcceptFriendRequest(string senderNickname, string recipientNickname);
     }
 
     [ServiceContract]
@@ -49,5 +58,8 @@ namespace Domain
 
         [OperationContract]
         void ReciveRedTeam(RedTeam redTeam);
+
+        [OperationContract]
+        void ReciveFriendRequest(string senderNickname);
     }
 }

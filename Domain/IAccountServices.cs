@@ -27,5 +27,7 @@ namespace Domain
         bool ChangePassword(Account account, string newPassword);
         [OperationContract]
         bool CurrentPassword(Account account, string currentPasswor);
+        [OperationContract]
+        bool ExistAccount(String email);
     }
 }

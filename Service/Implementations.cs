@@ -253,6 +253,29 @@ namespace Service
                 return false;
             }
         }
+
+        public bool ExistAccount(string email)
+        {
+            try
+            {
+                using (DeCryptoEntities context = new DeCryptoEntities())
+                {
+                    var foundAccount = context.AccountSet.Where(accountSet => accountSet.Email == email).FirstOrDefault();
+                    if (foundAccount == default)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex) { 
+                //mandar al logger
+                return false;
+            }
+        }
     }
 
 

@@ -100,22 +100,22 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>DecryptoModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="App.Config" />
+    <None Include="DecryptoModel.edmx.diagram">
+      <DependentUpon>DecryptoModel.edmx</DependentUpon>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="DecryptoModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>DecryptoModel.Context.cs</LastGenOutput>
       <DependentUpon>DecryptoModel.edmx</DependentUpon>
+      <LastGenOutput>DecryptoModel.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="DecryptoModel.edmx.sql" />
     <Content Include="DecryptoModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>DecryptoModel.cs</LastGenOutput>
       <DependentUpon>DecryptoModel.edmx</DependentUpon>
+      <LastGenOutput>DecryptoModel.cs</LastGenOutput>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

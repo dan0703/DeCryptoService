@@ -4,20 +4,20 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="69cc45f9f3c84f02a8612388b54bddb1" Name="Diagram1">
-        <EntityTypeShape EntityType="DeCryptoModel.AccountSet" Width="1.5" PointX="3" PointY="4.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="DeCryptoModel.BlueTeamSet" Width="1.5" PointX="5.25" PointY="1.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="DeCryptoModel.FriendList" Width="1.5" PointX="5.25" PointY="4.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="DeCryptoModel.GameSet" Width="1.5" PointX="7.5" PointY="4" IsExpanded="true" />
-        <EntityTypeShape EntityType="DeCryptoModel.RedTeamSet" Width="1.5" PointX="5.25" PointY="7" IsExpanded="true" />
-        <EntityTypeShape EntityType="DeCryptoModel.UserSet" Width="1.5" PointX="5.25" PointY="9.375" IsExpanded="true" />
-        <AssociationConnector Association="DeCryptoModel.FK_AccountAccount_Account" ManuallyRouted="false" />
-        <AssociationConnector Association="DeCryptoModel.FK_AccountAccount_Account1" ManuallyRouted="false" />
-        <AssociationConnector Association="DeCryptoModel.FK_UserAccount" ManuallyRouted="false" />
-        <AssociationConnector Association="DeCryptoModel.FK_BlueTeamGame" ManuallyRouted="false" />
-        <AssociationConnector Association="DeCryptoModel.FK_RedTeamGame" ManuallyRouted="false" />
-        <AssociationConnector Association="DeCryptoModel.AccountBlueTeam" ManuallyRouted="false" />
-        <AssociationConnector Association="DeCryptoModel.AccountRedTeam" ManuallyRouted="false" />
+      <Diagram DiagramId="ce078b9817184b929dc6872642e6bd6b" Name="Diagram1">
+        <EntityTypeShape EntityType="DecryptoModel.AccountSet" Width="1.5" PointX="0.75" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="DecryptoModel.BlueTeamSet" Width="1.5" PointX="3" PointY="1.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DecryptoModel.FriendList" Width="1.5" PointX="3" PointY="4.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="DecryptoModel.GameSet" Width="1.5" PointX="5.25" PointY="4.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="DecryptoModel.RedTeamSet" Width="1.5" PointX="3" PointY="7.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="DecryptoModel.UserSet" Width="1.5" PointX="3" PointY="9.5" IsExpanded="true" />
+        <AssociationConnector Association="DecryptoModel.FK_AccountAccount_Account" ManuallyRouted="false" />
+        <AssociationConnector Association="DecryptoModel.FK_AccountAccount_Account1" ManuallyRouted="false" />
+        <AssociationConnector Association="DecryptoModel.FK_UserAccount" ManuallyRouted="false" />
+        <AssociationConnector Association="DecryptoModel.FK_BlueTeamGame" ManuallyRouted="false" />
+        <AssociationConnector Association="DecryptoModel.FK_RedTeamGame" ManuallyRouted="false" />
+        <AssociationConnector Association="DecryptoModel.AccountBlueTeam" ManuallyRouted="false" />
+        <AssociationConnector Association="DecryptoModel.AccountRedTeam" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -18,6 +18,7 @@ namespace DataAccess
         public string Account1_Nickname { get; set; }
         public Nullable<bool> IsBlocked { get; set; }
         public Nullable<System.DateTime> StartDate { get; set; }
+        public Nullable<bool> RequestAccepted { get; set; }
     
         public virtual AccountSet AccountSet { get; set; }
         public virtual AccountSet AccountSet1 { get; set; }

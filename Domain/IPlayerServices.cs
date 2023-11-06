@@ -13,6 +13,12 @@ namespace Domain
     {
         [OperationContract]
         bool RegisterPlayer(User user);
+
+        [OperationContract]
+        List<string> GetSimilarsNickNames(string nickname);
+
+        [OperationContract]
+        bool ExistNickname(string nickName);
     }
     [ServiceContract(CallbackContract =typeof(IPlayerServicesCallback))]
     public interface IPlayerServicesCallback

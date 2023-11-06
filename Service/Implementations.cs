@@ -276,6 +276,57 @@ namespace Service
                 return false;
             }
         }
+
+        public List<string> GetSimilarsNickNames(string nickname)
+        {
+            List<string> nickNameList = new List<string>();
+            try
+            {
+                using (DeCryptoEntities context = new DeCryptoEntities())
+                {
+                    var foundPlayers = (from Account in context.AccountSet 
+                                        where Account.Nickname.StartsWith(nickname)
+                                        select Account).ToList();
+                    if (foundPlayers.Any())
+                    {
+                        foreach (var player in foundPlayers)
+                        {
+                            nickNameList.Add(player.Nickname);
+                        }
+                    }
+                    return nickNameList;
+                }
+            }
+            catch
+            {
+                return  nickNameList;
+            }
+        }
+
+        public bool ExistNickname(string nickName)
+        {
+            bool exist = false;
+            try
+            {
+                using (DeCryptoEntities context = new DeCryptoEntities())
+                {
+                    var foundPlayer = context.AccountSet.Where(accountSet => accountSet.Nickname == nickName).FirstOrDefault();
+                    if(foundPlayer != default)
+                    {
+                        exist = true;
+                    }
+                    else
+                    {
+                        exist = false;
+                    }
+                }
+            }
+            catch
+            {
+                exist = false;
+            }
+            return exist;
+        }
     }
 
 
@@ -504,6 +555,44 @@ namespace Service
             {
                 roomMessages.Remove(code);
             }
+        }
+
+        public void SendFriendRequest(string senderNickname, string recipientNickname)
+        {
+            try
+            {
+                using (DeCryptoEntities context = new DeCryptoEntities())
+                {
+                    var newRequest = new FriendList()
+                    {
+                        Account2_Nickname = senderNickname,
+                        Account1_Nickname = recipientNickname,
+                        IsBlocked = false,
+                        StartDate = DateTime.Now,
+                        RequestAccepted = false
+                    };
+                    context.FriendList.Add(newRequest);
+                    context.SaveChanges();                                                   
+                }
+                if (players.ContainsKey(recipientNickname))
+                {
+                    players[recipientNickname].ReciveFriendRequest(senderNickname);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        public Dictionary<string, byte[]> GetFriendList(string nickname)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool AcceptFriendRequest(string senderNickname, string recipientNickname)
+        {
+            throw new NotImplementedException();
         }
     }
 }

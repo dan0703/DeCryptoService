@@ -43,8 +43,8 @@ namespace Domain
         [OperationContract]
         Dictionary<string, byte[]> GetFriendList(string nickname);
 
-        [OperationContract]
-        bool AcceptFriendRequest(string senderNickname, string recipientNickname);
+        [OperationContract (IsOneWay =true)]
+        void AcceptFriendRequest(string senderNickname, string recipientNickname);
     }
 
     [ServiceContract]
@@ -61,5 +61,8 @@ namespace Domain
 
         [OperationContract]
         void ReciveFriendRequest(string senderNickname);
+
+        [OperationContract]
+        void SetFriendRequest();
     }
 }

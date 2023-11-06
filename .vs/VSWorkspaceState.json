@@ -5,6 +5,6 @@
     "\\Domain",
     "\\Service"
   ],
-  "SelectedNode": "\\DataAccess\\packages.config",
+  "SelectedNode": "\\Service\\Implementations.cs",
   "PreviewInSolutionExplorer": false
 }

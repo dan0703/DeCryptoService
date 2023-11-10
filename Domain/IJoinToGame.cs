@@ -60,9 +60,9 @@ namespace Domain
         void ReciveRedTeam(RedTeam redTeam);
 
         [OperationContract]
-        void ReciveFriendRequest(string senderNickname);
+        void ReciveFriendRequest(string senderNickname, List<string> friendRequestList);
 
         [OperationContract]
-        void SetFriendRequest();
+        void SetFriendList(List<string> friendList);
     }
 }

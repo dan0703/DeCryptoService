@@ -137,6 +137,8 @@ namespace Service
                     catch (DbUpdateException ex)
                     {
                         //mandar exepcion al logger
+                        Console.WriteLine($"Error: {ex.Message}");
+
                         return false;
                     }
                 };
@@ -195,7 +197,7 @@ namespace Service
             }
             catch (DbUpdateException ex)
             {
-                //Mandar al logger
+                Console.WriteLine($"Error: {ex.Message}");
                 return false;
             }
         }
@@ -223,6 +225,8 @@ namespace Service
                 }
             } catch (Exception ex)
             {
+                Console.WriteLine($"Error: {ex.Message}");
+
                 //enviar a logger
                 return false;
             }
@@ -250,6 +254,8 @@ namespace Service
             catch (DbUpdateException ex)
             {
                 //Mandar al logger
+                Console.WriteLine($"Error: {ex.Message}");
+
                 return false;
             }
         }
@@ -271,8 +277,10 @@ namespace Service
                     }
                 }
             }
-            catch (Exception ex) { 
+            catch (Exception ex) {
                 //mandar al logger
+                Console.WriteLine($"Error: {ex.Message}");
+
                 return false;
             }
         }
@@ -572,11 +580,15 @@ namespace Service
                         RequestAccepted = false
                     };
                     context.FriendList.Add(newRequest);
-                    context.SaveChanges();                                                   
-                }
-                if (players.ContainsKey(recipientNickname))
-                {
-                    players[recipientNickname].ReciveFriendRequest(senderNickname);
+                    context.SaveChanges();
+                    var friendRequests = context.FriendList.Where(friendList => friendList.Account2_Nickname.Equals(recipientNickname) 
+                    || friendList.Account1_Nickname.Equals(recipientNickname) && friendList.RequestAccepted == false).ToList();
+
+
+                    if (players.ContainsKey(recipientNickname))
+                    {
+                        players[recipientNickname].ReciveFriendRequest(senderNickname, new List<string>());
+                    }
                 }
             }
             catch (Exception ex)
@@ -590,7 +602,7 @@ namespace Service
             throw new NotImplementedException();
         }
 
-        public bool AcceptFriendRequest(string senderNickname, string recipientNickname)
+        public void AcceptFriendRequest(string senderNickname, string recipientNickname)
         {
             throw new NotImplementedException();
         }

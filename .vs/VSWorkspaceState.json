@@ -5,6 +5,6 @@
     "\\Domain",
     "\\Service"
   ],
-  "SelectedNode": "\\Service\\Implementations.cs",
+  "SelectedNode": "\\Domain\\IJoinToGame.cs",
   "PreviewInSolutionExplorer": false
 }

@@ -26,7 +26,7 @@ namespace Domain
         [OperationContract(IsOneWay = true)]
         void JoinToBlueTeam(BlueTeam blueTeam, int code);
 
-        [OperationContract (IsOneWay = true)]
+        [OperationContract(IsOneWay = true)]
         void JoinToRedTeam(RedTeam redTeam, int code);
 
         [OperationContract]
@@ -34,6 +34,7 @@ namespace Domain
 
         [OperationContract]
         void LeaveGame(string nickname);
+
         [OperationContract]
         bool IsFullRoom(int code);
 
@@ -43,8 +44,11 @@ namespace Domain
         [OperationContract]
         Dictionary<string, byte[]> GetFriendList(string nickname);
 
-        [OperationContract (IsOneWay =true)]
+        [OperationContract(IsOneWay =true)]
         void AcceptFriendRequest(string senderNickname, string recipientNickname);
+
+        [OperationContract(IsOneWay = true)]
+        void StartGame(int code);
     }
 
     [ServiceContract]
@@ -64,5 +68,8 @@ namespace Domain
 
         [OperationContract]
         void SetFriendList(List<string> friendList);
+
+        [OperationContract]
+        void GoToGameWindow();
     }
 }

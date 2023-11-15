@@ -339,7 +339,7 @@ namespace Service
 
 
 
-    [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Multiple)]
+    [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Reentrant)]
     public partial class Implementations : IJoinToGame, IChatMessage
     {
         private static readonly List<int> rooms = new List<int>();
@@ -479,6 +479,10 @@ namespace Service
                 players.Add(nickname, OperationContext.Current.GetCallbackChannel<IJoinToGameCallback>());
                 profilePictures.Add(nickname, profilePicture);
             }
+            else
+            {
+                players[nickname] = OperationContext.Current.GetCallbackChannel<IJoinToGameCallback>();
+            }
         }
 
         public void LeaveGame(string nickname)
@@ -605,6 +609,20 @@ namespace Service
         public void AcceptFriendRequest(string senderNickname, string recipientNickname)
         {
             throw new NotImplementedException();
+        }
+
+        public void StartGame(int code)
+        {
+            var playersByRoom = roomPlayers.Where(player => player.Value.Equals(code)).Select(player => player.Key).ToList();
+
+            foreach (var player in playersByRoom)
+            {
+                Console.WriteLine(player);
+                if (players.ContainsKey(player))
+                {
+                    players[player].GoToGameWindow();
+                }
+            }
         }
     }
 }

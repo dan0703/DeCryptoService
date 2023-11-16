@@ -14,11 +14,13 @@ using System.Net.Mail;
 using System.Net;
 using System.Configuration;
 using System.Security.Principal;
+using log4net;
 
 namespace Service
 {
     public partial class Implementations : IPlayerServices, IAccountServices
     {
+        private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         private List<User> GetPlayersList()
         {
@@ -100,10 +102,9 @@ namespace Service
                         {
                             foreach (var validationError in entityValidationError.ValidationErrors)
                             {
-                                Console.WriteLine($"Error en la propiedad {validationError.PropertyName}: {validationError.ErrorMessage}");
+                                log.Error(validationError);
                             }
                         }
-                        //enviar excepciones al logger
                         return true;
                     }
                 }
@@ -134,11 +135,9 @@ namespace Service
                         return true;
 
                     }
-                    catch (DbUpdateException ex)
+                    catch (DbUpdateException dbUpdateException)
                     {
-                        //mandar exepcion al logger
-                        Console.WriteLine($"Error: {ex.Message}");
-
+                        log.Debug(dbUpdateException);
                         return false;
                     }
                 };
@@ -169,9 +168,9 @@ namespace Service
                 smtpClient.Send(mailMessage);
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Console.WriteLine(ex.ToString());
+                log.Error(exception);
                 return false;
             }
         }
@@ -195,9 +194,9 @@ namespace Service
                     }
                 }
             }
-            catch (DbUpdateException ex)
+            catch (DbUpdateException exception)
             {
-                Console.WriteLine($"Error: {ex.Message}");
+                log.Error(exception);
                 return false;
             }
         }
@@ -223,11 +222,9 @@ namespace Service
                         }
                     }
                 }
-            } catch (Exception ex)
+            } catch (Exception exception)
             {
-                Console.WriteLine($"Error: {ex.Message}");
-
-                //enviar a logger
+                log.Error(exception);
                 return false;
             }
         }
@@ -251,11 +248,9 @@ namespace Service
                     }
                 }
             }
-            catch (DbUpdateException ex)
+            catch (DbUpdateException exception)
             {
-                //Mandar al logger
-                Console.WriteLine($"Error: {ex.Message}");
-
+                log.Error(exception);
                 return false;
             }
         }
@@ -277,10 +272,8 @@ namespace Service
                     }
                 }
             }
-            catch (Exception ex) {
-                //mandar al logger
-                Console.WriteLine($"Error: {ex.Message}");
-
+            catch (Exception exception) {
+                log.Error(exception);
                 return false;
             }
         }
@@ -595,9 +588,9 @@ namespace Service
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Console.WriteLine(ex.Message);
+                log.Error(exception);
             }
         }
 

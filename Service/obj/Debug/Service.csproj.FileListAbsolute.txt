@@ -55,3 +55,6 @@ C:\Users\danse\Desktop\DecryptoService\DecryptoService\Service\obj\Debug\Service
 C:\Users\danse\Desktop\DecryptoService\DecryptoService\Service\obj\Debug\Service.csproj.CopyComplete
 C:\Users\danse\Desktop\DecryptoService\DecryptoService\Service\obj\Debug\Service.exe
 C:\Users\danse\Desktop\DecryptoService\DecryptoService\Service\obj\Debug\Service.pdb
+C:\Users\Sujey\source\repos\DeCryptoService\Service\bin\Debug\log4net.dll
+C:\Users\Sujey\source\repos\DeCryptoService\Service\bin\Debug\log4net.xml
+C:\Users\Sujey\source\repos\DeCryptoService\Service\bin\Debug\log4net.config

@@ -15,6 +15,7 @@ using System.Net;
 using System.Configuration;
 using System.Security.Principal;
 using log4net;
+using System.Data.Entity.Core;
 
 namespace Service
 {
@@ -135,9 +136,9 @@ namespace Service
                         return true;
 
                     }
-                    catch (DbUpdateException dbUpdateException)
+                    catch (DbUpdateException ex)
                     {
-                        log.Debug(dbUpdateException);
+                        log.Debug(ex);
                         return false;
                     }
                 };
@@ -151,6 +152,7 @@ namespace Service
             string emailAddress = ConfigurationSettings.AppSettings["EMAIL_ADDRESS"];
             string password = ConfigurationSettings.AppSettings["PASSWORD"];
             string addressee = email;
+            bool success = false;
             try
             {
 
@@ -166,17 +168,31 @@ namespace Service
                     EnableSsl = true
                 };
                 smtpClient.Send(mailMessage);
-                return true;
+                success = true;
             }
-            catch (Exception exception)
+            catch (SmtpException ex)
             {
-                log.Error(exception);
-                return false;
+                log.Error(ex);
             }
+            catch (InvalidOperationException ex)
+            {
+                log.Error(ex);
+            }
+            catch (FormatException ex)
+            {
+                log.Error(ex);
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+            }
+            return success;
         }
 
         public bool VerifyEmail(Account account)
         {
+            bool success = false;
+            
             try
             {
                 using (DeCryptoEntities context = new DeCryptoEntities())
@@ -184,53 +200,52 @@ namespace Service
                     var foundAccount = context.AccountSet.Where(accountSet => accountSet.Email == account.email).FirstOrDefault();
                     if (foundAccount == default)
                     {
-                        return false;
+                        success = false;
                     }
                     else
                     {
                         foundAccount.EmailVerify = true;
                         context.SaveChanges();
-                        return true;
+                        success = true;
                     }
                 }
             }
-            catch (DbUpdateException exception)
+            catch (DbUpdateException ex)
             {
-                log.Error(exception);
-                return false;
+                log.Error(ex);
+                success = false;
             }
+            return success;
         }
-        public bool CurrentPassword(Account account, string currentPassword)
+        public bool IsCurrentPassword(Account account, string passwordIngresed)
         {
-            try
-            {
-                using (DeCryptoEntities context = new DeCryptoEntities()){
-                    var foundAccount = context.AccountSet.Where(accountSet => accountSet.Email == account.email).FirstOrDefault();
-                    if (foundAccount == default)
-                    {
-                        return false;
-                    }
-                    else
-                    {
-                        if (foundAccount.Password == currentPassword)
-                        {
-                            return true;
-                        }
-                        else
-                        {
-                            return false;
-                        }
-                    }
+            bool success = false;
+
+            using (DeCryptoEntities context = new DeCryptoEntities()){
+                var foundAccount = context.AccountSet.Where(accountSet => accountSet.Email == account.email).FirstOrDefault();
+                if (foundAccount == default)
+                {
+                    success = false;
                 }
-            } catch (Exception exception)
-            {
-                log.Error(exception);
-                return false;
+                else
+                {
+                     if (foundAccount.Password == passwordIngresed)
+                     {
+                        success = true;
+                     }
+                     else
+                        {
+                        success = false;
+                     }
+                }
             }
+            return success;
         }
 
         public bool ChangePassword(Account account, string newPassword)
         {
+            bool success = false;
+
             try
             {
                 using (DeCryptoEntities context = new DeCryptoEntities())
@@ -238,44 +253,41 @@ namespace Service
                     var foundAccount = context.AccountSet.Where(accountSet => accountSet.Email == account.email).FirstOrDefault();
                     if (foundAccount == default)
                     {
-                        return false;
+                        success = false;
                     }
                     else
                     {
                         foundAccount.Password = newPassword;
                         context.SaveChanges();
-                        return true;
+                        success = true;
                     }
                 }
             }
-            catch (DbUpdateException exception)
+            catch (DbUpdateException ex)
             {
-                log.Error(exception);
-                return false;
+                log.Error(ex);
+                success = false;
             }
+            return success;
         }
 
         public bool ExistAccount(string email)
         {
-            try
+            bool success = false;
+
+            using (DeCryptoEntities context = new DeCryptoEntities())
             {
-                using (DeCryptoEntities context = new DeCryptoEntities())
+                var foundAccount = context.AccountSet.Where(accountSet => accountSet.Email == email).FirstOrDefault();
+                if (foundAccount == default)
                 {
-                    var foundAccount = context.AccountSet.Where(accountSet => accountSet.Email == email).FirstOrDefault();
-                    if (foundAccount == default)
-                    {
-                        return false;
-                    }
-                    else
-                    {
-                        return true;
-                    }
+                    success = false;
+                }
+                else
+                {
+                    success = true;
                 }
             }
-            catch (Exception exception) {
-                log.Error(exception);
-                return false;
-            }
+            return success;
         }
 
         public List<string> GetSimilarsNickNames(string nickname)
@@ -307,6 +319,7 @@ namespace Service
         public bool ExistNickname(string nickName)
         {
             bool exist = false;
+            
             try
             {
                 using (DeCryptoEntities context = new DeCryptoEntities())
@@ -322,8 +335,14 @@ namespace Service
                     }
                 }
             }
-            catch
+            catch (EntityException ex)
             {
+                log.Error(ex);
+                exist = false;
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
                 exist = false;
             }
             return exist;
@@ -411,14 +430,17 @@ namespace Service
 
         public bool AllreadyExistRoom(int code)
         {
+            bool existRoom = false;
+
             if (rooms.Contains(code))
             {
-                return true;
+                existRoom = true;
             }
             else
             {
-                return false;
+                existRoom = false;
             }
+            return existRoom;
         }
 
         public void JoinToBlueTeam(BlueTeam blueTeam, int code)
@@ -489,15 +511,18 @@ namespace Service
 
         public bool IsFullRoom(int code)
         {
+            bool isFullRoom = false;
+
             int amountPlayers = roomPlayers.Where(player => player.Value.Equals(code)).Select(player => player.Key).Count();
             if (amountPlayers >= 4)
             {
-                return true;
+                isFullRoom = true;
             }
             else
             {
-                return false;
+                isFullRoom = false;
             }
+            return isFullRoom;
         }
 
         public void SendMessage(ChatMessage chatMessage, int code)
@@ -588,9 +613,9 @@ namespace Service
                     }
                 }
             }
-            catch (Exception exception)
+            catch (DbUpdateException ex)
             {
-                log.Error(exception);
+                log.Error(ex);
             }
         }
 

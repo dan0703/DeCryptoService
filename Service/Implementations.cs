@@ -358,7 +358,8 @@ namespace Service
         private static readonly Dictionary<string, int> roomPlayers = new Dictionary<string, int>();
         private static readonly Dictionary<int, BlueTeam> bluePlayers = new Dictionary<int, BlueTeam>();
         private static readonly Dictionary<int, RedTeam> redPlayers = new Dictionary<int, RedTeam>();
-        private static readonly Dictionary<string, IJoinToGameCallback> players = new Dictionary<string, IJoinToGameCallback>();
+
+        private static readonly Dictionary<string, Player> players = new Dictionary<string, Player>();
 
         private static readonly Dictionary<string, byte[]> profilePictures = new Dictionary<string, byte[]>();
         private static readonly Dictionary<int, List<ChatMessage>> roomMessages = new Dictionary<int, List<ChatMessage>>();
@@ -408,7 +409,7 @@ namespace Service
             }
             foreach (var player in playersList)
             {
-                players[player].RecivePlayers(profiles);
+                players[player].joinToGameCallback.RecivePlayers(profiles);
             }
         }
 
@@ -431,8 +432,7 @@ namespace Service
 
         public bool AllreadyExistRoom(int code)
         {
-            bool existRoom = false;
-
+            bool existRoom;
             if (rooms.Contains(code))
             {
                 existRoom = true;
@@ -475,7 +475,7 @@ namespace Service
             var playersList = roomPlayers.Where(player => player.Value.Equals(code)).Select(player => player.Key).ToList();
             foreach (var player in playersList)
             {
-                players[player].ReciveBlueTeam(blueTeam);
+                players[player].joinToGameCallback.ReciveBlueTeam(blueTeam);               
             }
         }
 
@@ -484,20 +484,26 @@ namespace Service
             var playersList = roomPlayers.Where(player => player.Value.Equals(code)).Select(player => player.Key).ToList();
             foreach (var player in playersList)
             {
-                players[player].ReciveRedTeam(redTeam);
+                players[player].joinToGameCallback.ReciveRedTeam(redTeam);
             }
         }
 
         public void JoinToGame(string nickname, byte[] profilePicture)
         {
+            Player player = new Player
+            {
+                friendsServicesCallback = OperationContext.Current.GetCallbackChannel<IFriendsServicesCallback>(),
+                joinToGameCallback = OperationContext.Current.GetCallbackChannel<IJoinToGameCallback>()
+            };
+
             if (!players.ContainsKey(nickname))
             {
-                players.Add(nickname, OperationContext.Current.GetCallbackChannel<IJoinToGameCallback>());
+                players.Add(nickname, player);
                 profilePictures.Add(nickname, profilePicture);
             }
             else
             {
-                players[nickname] = OperationContext.Current.GetCallbackChannel<IJoinToGameCallback>();
+                players[nickname] = player;
             }
         }
 
@@ -610,7 +616,7 @@ namespace Service
 
                     if (players.ContainsKey(recipientNickname))
                     {
-                        players[recipientNickname].ReciveFriendRequest(senderNickname, new List<string>());
+                        players[recipientNickname].friendsServicesCallback.ReciveFriendRequest(senderNickname, new List<string>());
                     }
                 }
             }
@@ -639,7 +645,7 @@ namespace Service
                 Console.WriteLine(player);
                 if (players.ContainsKey(player))
                 {
-                    players[player].GoToGameWindow();
+                    players[player].joinToGameCallback.GoToGameWindow();
                 }
             }
         }

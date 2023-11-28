@@ -59,11 +59,18 @@ C:\Users\Sujey\source\repos\DeCryptoService\Host\obj\Debug\Host.csproj.CoreCompi
 C:\Users\Sujey\source\repos\DeCryptoService\Host\obj\Debug\Host.csproj.CopyComplete
 C:\Users\Sujey\source\repos\DeCryptoService\Host\obj\Debug\Host.exe
 C:\Users\Sujey\source\repos\DeCryptoService\Host\obj\Debug\Host.pdb
+C:\Users\Sujey\source\repos\DeCryptoService\Host\bin\Debug\log4net.dll
+C:\Users\Sujey\source\repos\DeCryptoService\Host\bin\Debug\log4net.xml
+C:\Users\Sujey\source\repos\DeCryptoService\Host\bin\Debug\log4net.config
+C:\Users\Sujey\source\repos\DeCryptoService\Host\bin\Debug\App.config
+C:\Users\danse\Desktop\DecryptoService\DecryptoService\Host\bin\Debug\log4net.config
+C:\Users\danse\Desktop\DecryptoService\DecryptoService\Host\bin\Debug\App.config
 C:\Users\danse\Desktop\DecryptoService\DecryptoService\Host\bin\Debug\Host.exe.config
 C:\Users\danse\Desktop\DecryptoService\DecryptoService\Host\bin\Debug\Host.exe
 C:\Users\danse\Desktop\DecryptoService\DecryptoService\Host\bin\Debug\Host.pdb
 C:\Users\danse\Desktop\DecryptoService\DecryptoService\Host\bin\Debug\EntityFramework.dll
 C:\Users\danse\Desktop\DecryptoService\DecryptoService\Host\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\danse\Desktop\DecryptoService\DecryptoService\Host\bin\Debug\log4net.dll
 C:\Users\danse\Desktop\DecryptoService\DecryptoService\Host\bin\Debug\Service.exe
 C:\Users\danse\Desktop\DecryptoService\DecryptoService\Host\bin\Debug\Domain.dll
 C:\Users\danse\Desktop\DecryptoService\DecryptoService\Host\bin\Debug\DataAccess.exe
@@ -71,6 +78,7 @@ C:\Users\danse\Desktop\DecryptoService\DecryptoService\Host\bin\Debug\Service.pd
 C:\Users\danse\Desktop\DecryptoService\DecryptoService\Host\bin\Debug\Service.exe.config
 C:\Users\danse\Desktop\DecryptoService\DecryptoService\Host\bin\Debug\EntityFramework.xml
 C:\Users\danse\Desktop\DecryptoService\DecryptoService\Host\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\danse\Desktop\DecryptoService\DecryptoService\Host\bin\Debug\log4net.xml
 C:\Users\danse\Desktop\DecryptoService\DecryptoService\Host\bin\Debug\Domain.pdb
 C:\Users\danse\Desktop\DecryptoService\DecryptoService\Host\bin\Debug\DataAccess.pdb
 C:\Users\danse\Desktop\DecryptoService\DecryptoService\Host\bin\Debug\DataAccess.exe.config
@@ -80,7 +88,3 @@ C:\Users\danse\Desktop\DecryptoService\DecryptoService\Host\obj\Debug\Host.cspro
 C:\Users\danse\Desktop\DecryptoService\DecryptoService\Host\obj\Debug\Host.csproj.CopyComplete
 C:\Users\danse\Desktop\DecryptoService\DecryptoService\Host\obj\Debug\Host.exe
 C:\Users\danse\Desktop\DecryptoService\DecryptoService\Host\obj\Debug\Host.pdb
-C:\Users\Sujey\source\repos\DeCryptoService\Host\bin\Debug\log4net.dll
-C:\Users\Sujey\source\repos\DeCryptoService\Host\bin\Debug\log4net.xml
-C:\Users\Sujey\source\repos\DeCryptoService\Host\bin\Debug\log4net.config
-C:\Users\Sujey\source\repos\DeCryptoService\Host\bin\Debug\App.config

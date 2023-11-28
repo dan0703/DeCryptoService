@@ -47,6 +47,7 @@
     <Compile Include="data\BlueTeam.cs" />
     <Compile Include="data\ChatMessage.cs" />
     <Compile Include="data\GameConfigurations.cs" />
+    <Compile Include="data\Player.cs" />
     <Compile Include="data\RedTeam.cs" />
     <Compile Include="data\Room.cs" />
     <Compile Include="data\User.cs" />

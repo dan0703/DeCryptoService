@@ -52,6 +52,7 @@
     <Compile Include="data\User.cs" />
     <Compile Include="IAccountServices.cs" />
     <Compile Include="IChatMessage.cs" />
+    <Compile Include="IFriendsServices.cs" />
     <Compile Include="IJoinToGame.cs" />
     <Compile Include="IPlayerServices.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

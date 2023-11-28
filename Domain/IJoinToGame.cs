@@ -39,15 +39,6 @@ namespace Domain
         bool IsFullRoom(int code);
 
         [OperationContract(IsOneWay = true)]
-        void SendFriendRequest(string senderNickname, string recipientNickname);
-
-        [OperationContract]
-        Dictionary<string, byte[]> GetFriendList(string nickname);
-
-        [OperationContract(IsOneWay =true)]
-        void AcceptFriendRequest(string senderNickname, string recipientNickname);
-
-        [OperationContract(IsOneWay = true)]
         void StartGame(int code);
     }
 
@@ -62,12 +53,6 @@ namespace Domain
 
         [OperationContract]
         void ReciveRedTeam(RedTeam redTeam);
-
-        [OperationContract]
-        void ReciveFriendRequest(string senderNickname, List<string> friendRequestList);
-
-        [OperationContract]
-        void SetFriendList(List<string> friendList);
 
         [OperationContract]
         void GoToGameWindow();

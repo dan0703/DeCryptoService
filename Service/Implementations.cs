@@ -352,13 +352,14 @@ namespace Service
 
 
     [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Reentrant)]
-    public partial class Implementations : IJoinToGame, IChatMessage
+    public partial class Implementations : IJoinToGame, IChatMessage, IFriendsServices
     {
         private static readonly List<int> rooms = new List<int>();
         private static readonly Dictionary<string, int> roomPlayers = new Dictionary<string, int>();
         private static readonly Dictionary<int, BlueTeam> bluePlayers = new Dictionary<int, BlueTeam>();
         private static readonly Dictionary<int, RedTeam> redPlayers = new Dictionary<int, RedTeam>();
         private static readonly Dictionary<string, IJoinToGameCallback> players = new Dictionary<string, IJoinToGameCallback>();
+
         private static readonly Dictionary<string, byte[]> profilePictures = new Dictionary<string, byte[]>();
         private static readonly Dictionary<int, List<ChatMessage>> roomMessages = new Dictionary<int, List<ChatMessage>>();
         private static readonly Dictionary<string, IChatMessageCallback> chatPlayers = new Dictionary<string, IChatMessageCallback>();

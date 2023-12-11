@@ -83,7 +83,6 @@ C:\Users\danse\Desktop\DecryptoService\DecryptoService\Host\bin\Debug\Domain.pdb
 C:\Users\danse\Desktop\DecryptoService\DecryptoService\Host\bin\Debug\DataAccess.pdb
 C:\Users\danse\Desktop\DecryptoService\DecryptoService\Host\bin\Debug\DataAccess.exe.config
 C:\Users\danse\Desktop\DecryptoService\DecryptoService\Host\obj\Debug\Host.csproj.AssemblyReference.cache
-C:\Users\danse\Desktop\DecryptoService\DecryptoService\Host\obj\Debug\Host.csproj.SuggestedBindingRedirects.cache
 C:\Users\danse\Desktop\DecryptoService\DecryptoService\Host\obj\Debug\Host.csproj.CoreCompileInputs.cache
 C:\Users\danse\Desktop\DecryptoService\DecryptoService\Host\obj\Debug\Host.csproj.CopyComplete
 C:\Users\danse\Desktop\DecryptoService\DecryptoService\Host\obj\Debug\Host.exe

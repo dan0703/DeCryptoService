@@ -56,7 +56,6 @@ C:\Users\danse\Desktop\DecryptoService\DecryptoService\Service\bin\Debug\EntityF
 C:\Users\danse\Desktop\DecryptoService\DecryptoService\Service\bin\Debug\EntityFramework.SqlServer.xml
 C:\Users\danse\Desktop\DecryptoService\DecryptoService\Service\bin\Debug\log4net.xml
 C:\Users\danse\Desktop\DecryptoService\DecryptoService\Service\obj\Debug\Service.csproj.AssemblyReference.cache
-C:\Users\danse\Desktop\DecryptoService\DecryptoService\Service\obj\Debug\Service.csproj.SuggestedBindingRedirects.cache
 C:\Users\danse\Desktop\DecryptoService\DecryptoService\Service\obj\Debug\Service.csproj.CoreCompileInputs.cache
 C:\Users\danse\Desktop\DecryptoService\DecryptoService\Service\obj\Debug\Service.csproj.CopyComplete
 C:\Users\danse\Desktop\DecryptoService\DecryptoService\Service\obj\Debug\Service.exe

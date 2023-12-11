@@ -19,6 +19,9 @@ namespace Domain
 
         [OperationContract(IsOneWay = true)]
         void AcceptFriendRequest(string senderNickname, string recipientNickname);
+
+        [OperationContract]
+        void jointToFriendRequestService(string nickname);
     }
 
     [ServiceContract]

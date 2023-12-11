@@ -40,36 +40,45 @@ namespace Service
 
         public Account Login(Account account)
         {
+            Account newAccount = null;
             if (account == null)
             {
-                return null;
+                return newAccount;
             }
             else
             {
                 using (DeCryptoEntities context = new DeCryptoEntities())
                 {
-                    var foundAccount = context.AccountSet.Where(accountSet => accountSet.Email == account.email).FirstOrDefault();
-                    if (foundAccount == default)
+                    try
                     {
-                        return null;
-                    }
-                    else
-                    {
-                        if (account.password == foundAccount.Password)
+                        var foundAccount = context.AccountSet.Where(accountSet => accountSet.Email == account.email).FirstOrDefault();
+                        if (foundAccount == default)
                         {
-                            Account newAccount = new Account()
-                            {
-                                email = foundAccount.Email,
-                                emailVerify = foundAccount.EmailVerify,
-                                nickname = foundAccount.Nickname
-                            };
                             return newAccount;
                         }
                         else
                         {
-                            return null;
+                            if (account.password == foundAccount.Password)
+                            {
+                                newAccount = new Account()
+                                {
+                                    email = foundAccount.Email,
+                                    emailVerify = foundAccount.EmailVerify,
+                                    nickname = foundAccount.Nickname
+                                };
+                                return newAccount;
+                            }
+                            else
+                            {
+                                return newAccount;
+                            }
                         }
                     }
+                    catch (Exception ex)
+                    {
+                        log.Debug(ex);
+                        return newAccount;
+                    }                    
                 }
             }
         }
@@ -490,12 +499,10 @@ namespace Service
 
         public void JoinToGame(string nickname, byte[] profilePicture)
         {
-            Player player = new Player
+            Player player = new Player()
             {
-                friendsServicesCallback = OperationContext.Current.GetCallbackChannel<IFriendsServicesCallback>(),
-                joinToGameCallback = OperationContext.Current.GetCallbackChannel<IJoinToGameCallback>()
+                joinToGameCallback = OperationContext.Current.GetCallbackChannel<IJoinToGameCallback>(),
             };
-
             if (!players.ContainsKey(nickname))
             {
                 players.Add(nickname, player);
@@ -503,7 +510,7 @@ namespace Service
             }
             else
             {
-                players[nickname] = player;
+                players[nickname].joinToGameCallback = player.joinToGameCallback;
             }
         }
 
@@ -647,6 +654,19 @@ namespace Service
                 {
                     players[player].joinToGameCallback.GoToGameWindow();
                 }
+            }
+        }
+
+        public void jointToFriendRequestService(string nickname)
+        {
+            Player player = new Player()
+            {
+                friendsServicesCallback = OperationContext.Current.GetCallbackChannel<IFriendsServicesCallback>(),
+            };
+            if (players.ContainsKey(nickname))
+            {
+                players[nickname].friendsServicesCallback = player.friendsServicesCallback;
+
             }
         }
     }

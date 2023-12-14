@@ -12,16 +12,13 @@ namespace Domain
     public interface IJoinToGame
     {
         [OperationContract]
-        int CreateRoom();
+        int CreateRoom(string nickname);
 
         [OperationContract(IsOneWay = true)]
         void JoinToRoom(int code, string nickname);
 
         [OperationContract]
         void LeaveRoom(string nickname, int code, BlueTeam blueTeam, RedTeam redTeam);
-
-        [OperationContract]
-        bool AllreadyExistRoom(int code);
 
         [OperationContract(IsOneWay = true)]
         void JoinToBlueTeam(BlueTeam blueTeam, int code);
@@ -33,10 +30,7 @@ namespace Domain
         void JoinToGame(string nickname, byte[] profilePicture);
 
         [OperationContract]
-        void LeaveGame(string nickname);
-
-        [OperationContract]
-        bool IsFullRoom(int code);
+        void LeaveGame(string nickname);        
 
         [OperationContract(IsOneWay = true)]
         void StartGame(int code);

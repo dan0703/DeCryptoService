@@ -46,7 +46,7 @@
     <Compile Include="data\Account.cs" />
     <Compile Include="data\BlueTeam.cs" />
     <Compile Include="data\ChatMessage.cs" />
-    <Compile Include="data\GameConfigurations.cs" />
+    <Compile Include="data\GameConfiguration.cs" />
     <Compile Include="data\Player.cs" />
     <Compile Include="data\RedTeam.cs" />
     <Compile Include="data\Room.cs" />
@@ -54,9 +54,14 @@
     <Compile Include="IAccountServices.cs" />
     <Compile Include="IChatMessage.cs" />
     <Compile Include="IFriendsServices.cs" />
+    <Compile Include="IGameServices.cs" />
     <Compile Include="IJoinToGame.cs" />
     <Compile Include="IPlayerServices.cs" />
+    <Compile Include="IRoomServices.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="data\wordList.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

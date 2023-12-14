@@ -164,7 +164,6 @@ namespace Service
             bool success = false;
             try
             {
-
                 var mailMessage = new MailMessage(emailAddress, addressee, title, (message + " " + code + "."))
                 {
                     IsBodyHtml = true
@@ -200,8 +199,7 @@ namespace Service
 
         public bool VerifyEmail(Account account)
         {
-            bool success = false;
-            
+            bool success = false;            
             try
             {
                 using (DeCryptoEntities context = new DeCryptoEntities())
@@ -243,7 +241,7 @@ namespace Service
                         success = true;
                      }
                      else
-                        {
+                     {
                         success = false;
                      }
                 }
@@ -361,20 +359,18 @@ namespace Service
 
 
     [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Reentrant)]
-    public partial class Implementations : IJoinToGame, IChatMessage, IFriendsServices
+    public partial class Implementations : IJoinToGame, IChatMessage, IFriendsServices, IRoomServices
     {
         private static readonly List<int> rooms = new List<int>();
         private static readonly Dictionary<string, int> roomPlayers = new Dictionary<string, int>();
         private static readonly Dictionary<int, BlueTeam> bluePlayers = new Dictionary<int, BlueTeam>();
         private static readonly Dictionary<int, RedTeam> redPlayers = new Dictionary<int, RedTeam>();
-
         private static readonly Dictionary<string, Player> players = new Dictionary<string, Player>();
-
         private static readonly Dictionary<string, byte[]> profilePictures = new Dictionary<string, byte[]>();
         private static readonly Dictionary<int, List<ChatMessage>> roomMessages = new Dictionary<int, List<ChatMessage>>();
         private static readonly Dictionary<string, IChatMessageCallback> chatPlayers = new Dictionary<string, IChatMessageCallback>();
 
-        public int CreateRoom()
+        public int CreateRoom(string nickname)
         {
             var random = new Random();
             var lowerBound = 1000;
@@ -387,6 +383,18 @@ namespace Service
             rooms.Add(code);
             bluePlayers.Add(code, new BlueTeam());
             redPlayers.Add(code, new RedTeam());
+            GameConfiguration gameConfiguration = new GameConfiguration();
+            gameConfiguration.HostNickname = nickname;
+
+            string relativePath = "../../../Domain/data/wordList.txt";
+            BlueTeam blueTeam = new BlueTeam();
+            RedTeam redTeam = new RedTeam();
+            blueTeam.wordList = WordLoader.GetRandomWordsFromFile(relativePath);
+            redTeam.wordList = WordLoader.GetRandomWordsFromFile(relativePath);
+            gameConfiguration.blueTeam = blueTeam;
+            gameConfiguration.redTeam = redTeam;
+            
+            gameConfigurations.Add(code, gameConfiguration);
             return code;
         }
 
@@ -463,6 +471,11 @@ namespace Service
             {
                 bluePlayers.Add(code, blueTeam);
             }
+            if (gameConfigurations.ContainsKey(code))
+            {
+                gameConfigurations[code].blueTeam.nicknamePlayer1 = blueTeam.nicknamePlayer1;
+                gameConfigurations[code].blueTeam.nicknamePlayer2 = blueTeam.nicknamePlayer2;
+            }
             SetBlueteam(code, blueTeam);
         }
 
@@ -475,6 +488,11 @@ namespace Service
             else
             {
                 redPlayers.Add(code, redTeam);
+            }
+            if (gameConfigurations.ContainsKey(code))
+            {
+                gameConfigurations[code].redTeam.nicknamePlayer1 = redTeam.nicknamePlayer1;
+                gameConfigurations[code].redTeam.nicknamePlayer2 = redTeam.nicknamePlayer2;
             }
             SetRedteam(code, redTeam);
         }
@@ -666,8 +684,99 @@ namespace Service
             if (players.ContainsKey(nickname))
             {
                 players[nickname].friendsServicesCallback = player.friendsServicesCallback;
-
             }
+        }
+    }
+    public partial class Implementations : IGameServices 
+    {
+        private static readonly Dictionary<int, GameConfiguration> gameConfigurations = new Dictionary<int, GameConfiguration>();
+        public List<string> GetBlueTeamWords(int code)
+        {
+            List<string> wordList = new List<string>();
+            if (gameConfigurations.ContainsKey(code))
+            {
+                wordList = gameConfigurations[code].blueTeam.wordList;
+            }
+            return wordList;
+        }
+        public void JoinToGameBoard(byte[] profilePicture, string nickname, int code)
+        {
+             Player player = new Player()
+            {
+                gameServiceCallback = OperationContext.Current.GetCallbackChannel<IGameServiceCallback>(),
+            };
+            if (players.ContainsKey(nickname))
+            {
+                players[nickname].gameServiceCallback = player.gameServiceCallback;
+                if (gameConfigurations.ContainsKey(code))
+                {
+                    players[nickname].gameServiceCallback.SetBoard(gameConfigurations[code]);
+                }
+            }
+            
+        }
+
+        public List<string> GetRedTeamWords(int code)
+        {
+            List<string> wordList = new List<string>();
+            if (gameConfigurations.ContainsKey(code))
+            {
+                GameConfiguration gameConfiguration = gameConfigurations[code];
+                wordList = gameConfiguration.redTeam.wordList;
+            }            
+            return wordList;
+        }
+        
+
+
+        public void GiveBlueTeamClues(List<string> blueTeamClues, int code, string ownNickname)
+        {
+            for(int i = 0; i < blueTeamClues.Count; i++)
+            {
+                Console.WriteLine(gameConfigurations[code].blueTeam.wordList[i] + blueTeamClues[i]);
+            }
+            Console.WriteLine("fail");
+            if (gameConfigurations.ContainsKey(code))
+            {
+                GameConfiguration gameConfiguration = gameConfigurations[code];
+                gameConfiguration.blueTeam.clues[gameConfiguration.roundNumber] = blueTeamClues;
+                gameConfigurations[code] = gameConfiguration;
+                var playersInGame = roomPlayers.Where(player => player.Value.Equals(code)).Select(player => player.Key).ToList();
+                foreach(var player in playersInGame)
+                {
+                    if (players.ContainsKey(player))
+                    {
+                        players[player].gameServiceCallback.SetBlueTeamClues(blueTeamClues);
+                    }
+
+                }
+            }
+        }
+
+        public void GiveRedTeamClues(List<string> redTeamClues, int code, string ownNickname)
+        {
+            
+        }        
+
+        public void MakeWaitForClues(string targetNickname, int code)
+        {
+            if (gameConfigurations.ContainsKey(code))
+            {                                
+                if (players.ContainsKey(targetNickname))
+                {
+                    players[targetNickname].gameServiceCallback.WaitForGuesses();
+                }
+            }            
+        }
+
+        public void SubmitBlueTeamInterceptionResult(bool isCorrectInterception, int code)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SubmitRedTeamIntercepcionResult(bool isCorrectInterception, int code)
+        {
+            throw new NotImplementedException();
         }
     }
 }

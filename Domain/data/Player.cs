@@ -15,5 +15,8 @@ namespace Domain.data
 
         [DataMember]
         public IJoinToGameCallback joinToGameCallback { get; set; }
+
+        [DataMember]
+        public IGameServiceCallback gameServiceCallback { get; set; }
     }
 }

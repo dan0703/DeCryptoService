@@ -30,6 +30,12 @@ namespace Domain
         void GiveRedTeamClues(List<string> redTeamClues, int code, string ownNickname);
 
         [OperationContract(IsOneWay = true)]
+        void GiveBlueTeamGuesses(List<string> blueTeamGuesses, int code, string ownNickname);
+
+        [OperationContract(IsOneWay = true)]
+        void GiveRedTeamGesses(List<string> redTeamGuesses, int code, string ownNickname);
+
+        [OperationContract(IsOneWay = true)]
         void SubmitBlueTeamInterceptionResult(bool isCorrectInterception, int code);
 
         [OperationContract(IsOneWay = true)]

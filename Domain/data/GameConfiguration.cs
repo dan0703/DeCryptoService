@@ -45,7 +45,7 @@ namespace Domain.data
             return words;
         }
 
-        public static List<string> GetRandomWordsFromFile(string relativePath)
+        public static List<string> GetRandomWordsFromFile(string relativePath, Random random)
         {
             List<string> allWords = LoadWordsFromFile(relativePath);
             List<string> randomWords = new List<string>();
@@ -53,7 +53,6 @@ namespace Domain.data
             {
                 if (allWords.Count >= 4)
                 {
-                    Random random = new Random();
                     for (int i = 0; i < 4; i++)
                     {
                         int randomIndex = random.Next(allWords.Count);

@@ -40,10 +40,10 @@ namespace Domain
     public interface IGameServiceCallback
     {
         [OperationContract]
-        void SetBlueTeamClues(List<string> blueTeamClues);        
+        void SetBlueTeamClues(List<string>[] blueTeamClues);        
 
         [OperationContract]
-        void SetRedTeamClues(List<string> redTeamClues);
+        void SetRedTeamClues(List<string>[] redTeamClues);
 
         [OperationContract]
         void SetBlueTeamScore(int blueTeamInterception, int blueTeamMisComunications);

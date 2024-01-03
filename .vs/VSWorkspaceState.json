@@ -3,6 +3,7 @@
     "",
     "\\DataAccess",
     "\\Domain",
+    "\\Domain\\data",
     "\\Service"
   ],
   "SelectedNode": "\\Service\\Implementations.cs",

@@ -379,21 +379,29 @@ namespace Service
             while (rooms.Contains(code))
             {
                 code = random.Next(lowerBound, upperBound);
-            };
+            }
+
             rooms.Add(code);
+
+            Random blueTeamRandom = new Random();
+            Random redTeamRandom = new Random();
+
             bluePlayers.Add(code, new BlueTeam());
             redPlayers.Add(code, new RedTeam());
+
             GameConfiguration gameConfiguration = new GameConfiguration();
             gameConfiguration.HostNickname = nickname;
-
             string relativePath = "../../../Domain/data/wordList.txt";
+
             BlueTeam blueTeam = new BlueTeam();
             RedTeam redTeam = new RedTeam();
-            blueTeam.wordList = WordLoader.GetRandomWordsFromFile(relativePath);
-            redTeam.wordList = WordLoader.GetRandomWordsFromFile(relativePath);
+
+            blueTeam.wordList = WordLoader.GetRandomWordsFromFile(relativePath, blueTeamRandom);
+            redTeam.wordList = WordLoader.GetRandomWordsFromFile(relativePath, redTeamRandom);
+
             gameConfiguration.blueTeam = blueTeam;
             gameConfiguration.redTeam = redTeam;
-            
+
             gameConfigurations.Add(code, gameConfiguration);
             return code;
         }
@@ -415,13 +423,14 @@ namespace Service
         private void SetPlayers(int code)
         {
             var playersList = roomPlayers.Where(player => player.Value.Equals(code)).Select(player => player.Key).ToList();
-            Dictionary<string, byte[]> profiles = profilePictures;
+            Dictionary<string, byte[]> profiles = new Dictionary<string, byte[]>(profilePictures);
 
-            foreach (var player in playersList)
+
+            foreach (var profile in profilePictures)
             {
-                if (!profiles.ContainsKey(player))
+                if (!playersList.Contains(profile.Key))
                 {
-                    profiles.Remove(player);
+                    profiles.Remove(profile.Key);
                 }
             }
             foreach (var player in playersList)
@@ -725,17 +734,10 @@ namespace Service
                 wordList = gameConfiguration.redTeam.wordList;
             }            
             return wordList;
-        }
-        
-
+        }        
 
         public void GiveBlueTeamClues(List<string> blueTeamClues, int code, string ownNickname)
         {
-            for(int i = 0; i < blueTeamClues.Count; i++)
-            {
-                Console.WriteLine(gameConfigurations[code].blueTeam.wordList[i] + blueTeamClues[i]);
-            }
-            Console.WriteLine("fail");
             if (gameConfigurations.ContainsKey(code))
             {
                 GameConfiguration gameConfiguration = gameConfigurations[code];
@@ -746,16 +748,29 @@ namespace Service
                 {
                     if (players.ContainsKey(player))
                     {
-                        players[player].gameServiceCallback.SetBlueTeamClues(blueTeamClues);
+                        players[player].gameServiceCallback.SetBlueTeamClues(gameConfiguration.redTeam.clues);
                     }
-
                 }
             }
         }
 
         public void GiveRedTeamClues(List<string> redTeamClues, int code, string ownNickname)
         {
-            
+            if (gameConfigurations.ContainsKey(code))
+            {
+                GameConfiguration gameConfiguration = gameConfigurations[code];
+                gameConfiguration.redTeam.clues[gameConfiguration.roundNumber] = redTeamClues;
+                gameConfigurations[code] = gameConfiguration;
+                
+                var playersInGame = roomPlayers.Where(player => player.Value.Equals(code)).Select(player => player.Key).ToList();
+                foreach (var player in playersInGame)
+                {
+                    if (players.ContainsKey(player))
+                    {
+                        players[player].gameServiceCallback.SetRedTeamClues(gameConfiguration.redTeam.clues);
+                    }
+                }
+            }
         }        
 
         public void MakeWaitForClues(string targetNickname, int code)

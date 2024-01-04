@@ -319,6 +319,7 @@ namespace Service
             }
             catch
             {
+                log.Error(nickNameList);
                 return  nickNameList;
             }
         }
@@ -790,6 +791,16 @@ namespace Service
         }
 
         public void SubmitRedTeamIntercepcionResult(bool isCorrectInterception, int code)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void GiveBlueTeamGuesses(List<string> blueTeamGuesses, int code, string ownNickname)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void GiveRedTeamGesses(List<string> redTeamGuesses, int code, string ownNickname)
         {
             throw new NotImplementedException();
         }

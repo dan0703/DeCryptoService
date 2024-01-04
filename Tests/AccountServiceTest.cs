@@ -4,14 +4,26 @@ using Domain;
 using Service;
 using Domain.data;
 using DataAccess;
+using System.Transactions;
 
 namespace Tests
 {
     [TestClass]
     public class AccountServiceTest
     {
+        private DeCryptoEntities context;
+        private TransactionScope transaction;
+
+        
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            context = new DeCryptoEntities();
+            transaction = new TransactionScope();
+        }
+
         [TestMethod]
-        public void Test01_LoginSuccesfull()
+        public void LoginCorrectCredentials()
         {   
             IAccountServices accountService = new Implementations();
             Account validAccount = new Account
@@ -26,7 +38,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Test02_LoginFail()
+        public void LoginIncorrectEmail()
         {
             IAccountServices accountService = new Implementations();
             Account invalidAccount = new Account
@@ -40,9 +52,23 @@ namespace Tests
             Assert.IsNull(result);
         }
 
-        /*
         [TestMethod]
-        public void Test03_RegisterAccountSuccesfull()
+        public void LoginIncorrectPassword()
+        {
+            IAccountServices accountService = new Implementations();
+            Account invalidAccount = new Account
+            {
+                nickname = "Sujey",
+                email = "sujey5420@gmail.com",
+                emailVerify = true,
+                password = "af7363cebf5e844dbac559ecae74de7d13a8ade6a1d53b8843f5f44"
+            };
+            Account result = accountService.Login(invalidAccount);
+            Assert.IsNull(result);
+        }
+
+        [TestMethod]
+        public void RegisterAccountSuccesfull()
         {
             IAccountServices accountService = new Implementations();
             Account validAccount = new Account
@@ -55,10 +81,9 @@ namespace Tests
             bool result = accountService.RegisterAccount(validAccount);
             Assert.IsTrue(result);
         }
-        */
-
+        
         [TestMethod]
-        public void Test04_VerifyEmailSuccesfull()
+        public void VerifyExistingEmail()
         {
             IAccountServices accountService = new Implementations();
             Account validAccount = new Account
@@ -73,7 +98,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Test05_VerifyEmailFail()
+        public void VerifyNotExistingEmail()
         {
             IAccountServices accountService = new Implementations();
             Account invalidAccount = new Account
@@ -88,14 +113,14 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Test06_ChangePasswordSucess()
+        public void ChangePasswordExistingAccount()
         {
             IAccountServices accountService = new Implementations();
             Account validAccount = new Account
             {
-                nickname = "lixie",
-                email = "lixie01@gmail.com",
-                emailVerify = false,
+                nickname = "Sujey",
+                email = "sujey542003@gmail.com",
+                emailVerify = true,
                 password = "af7363cebf5e844dbac559ecae74de7d13a8ade6a1d53b8843f5f4475025d6eb"
             };
             String password = "e9d8ab9f2a9424dccb9e82e7a9b3e4e736f74323e0c8bbefb9b1d5b8cb24e1e0";
@@ -104,7 +129,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Test07_ChangePasswordFail()
+        public void ChangePasswordNonexistentAccount()
         {
             IAccountServices accountService = new Implementations();
             Account invalidAccount = new Account
@@ -120,7 +145,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Test08_IsCurrentPasswordSucessfull()
+        public void IsCurrentPasswordMatch()
         {
             IAccountServices accountService = new Implementations();
             Account validAccount = new Account
@@ -136,15 +161,15 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Test09_IsCurrentPasswordFail()
+        public void IsCurrentPasswordNoMatch()
         {
             IAccountServices accountService = new Implementations();
             Account invalidAccount = new Account
             {
-                nickname = "lixie",
-                email = "lixie01@gmail.com",
+                nickname = "other",
+                email = "mingilix8@gmail.com",
                 emailVerify = false,
-                password = "e9d8ab9f2a9424dccb9e82e7a9b3e4e736f74323e0c8bbefb9b1d5b8cb24e1e0"
+                password = "20a69db924fbc16bbf478373baf9e1abd1dc8e0b338b8a8cd4033ec3defacea0"
             };
             String password = "af7363cebf5e844dbac559ecae74de7d13a8ade6a1d53b8843f5f4475025d6eb";
             bool result = accountService.IsCurrentPassword(invalidAccount, password);
@@ -152,21 +177,28 @@ namespace Tests
         }
 
         [TestMethod]
-        public void Test10_ExistAccountSuccess()
+        public void ExistAccount()
         {
             IAccountServices accountService = new Implementations();
-            String email = "lixie01@gmail.com";
+            String email = "user@gmail.com";
             bool result = accountService.ExistAccount(email);
             Assert.IsTrue(result);
         }
 
         [TestMethod]
-        public void Test11_ExistAccountFail()
+        public void NonexistentAccount()
         {
             IAccountServices accountService = new Implementations();
             String email = "lixie@gmail.com";
             bool result = accountService.ExistAccount(email);
             Assert.IsFalse(result);
+        }
+
+        [TestCleanup]
+        public void TestCleanup()
+        {
+            transaction.Dispose();
+            context.Dispose();
         }
     }
 }

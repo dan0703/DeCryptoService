@@ -27,14 +27,14 @@ namespace Tests
         [TestMethod]
         public void RegisterPlayer()
         {
-            IPlayerServices playerService = new Implementations();
+            Implementations implementations = new Implementations();
             User validUser = new User
             {
                 name = "Juan Carlos Pérez Arriaga",
                 accountNickname = "elrevo",
                 birthDay = "24/09/2003"
             };
-            bool result = playerService.RegisterPlayer(validUser);
+            bool result = implementations.RegisterPlayer(validUser);
             Assert.IsTrue(result);
         }
 
@@ -46,10 +46,10 @@ namespace Tests
                 "user"
             };
 
-            IPlayerServices playerService = new Implementations();
+            Implementations implementations = new Implementations();
             String nickname = "us";
             
-            List<String> result = playerService.GetSimilarsNickNames(nickname);
+            List<String> result = implementations.GetSimilarsNickNames(nickname);
             CollectionAssert.AreEqual(expected, result);
         }
 
@@ -61,28 +61,28 @@ namespace Tests
                 "bonie"
             };
 
-            IPlayerServices playerService = new Implementations();
+            Implementations implementations = new Implementations();
             String nickname = "boni";
 
-            List<String> result = playerService.GetSimilarsNickNames(nickname);
+            List<String> result = implementations.GetSimilarsNickNames(nickname);
             CollectionAssert.AreNotEqual(expected, result);
         }
 
         [TestMethod]
         public void ExistingNickname()
         {
-            IPlayerServices playerService = new Implementations();
+            Implementations implementations = new Implementations();
             String nickname = "Sujey";
-            bool result = playerService.ExistNickname(nickname);
+            bool result = implementations.ExistNickname(nickname);
             Assert.IsTrue(result);
         }
 
         [TestMethod]
         public void NonexistentNickname()
         {
-            IPlayerServices playerService = new Implementations();
+            Implementations implementations = new Implementations();
             String nickname = "mingi";
-            bool result = playerService.ExistNickname(nickname);
+            bool result = implementations.ExistNickname(nickname);
             Assert.IsFalse(result);
         }
 

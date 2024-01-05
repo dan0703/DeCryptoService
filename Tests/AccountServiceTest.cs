@@ -25,7 +25,7 @@ namespace Tests
         [TestMethod]
         public void LoginCorrectCredentials()
         {   
-            IAccountServices accountService = new Implementations();
+            Implementations implementations = new Implementations();
             Account validAccount = new Account
             {
                 nickname = "Sujey",
@@ -33,14 +33,14 @@ namespace Tests
                 emailVerify = true,
                 password = "af7363cebf5e844dbac559ecae74de7d13a8ade6a1d53b8843f5f4475025d6eb"
             };
-            Account result = accountService.Login(validAccount);
+            Account result = implementations.Login(validAccount);
             Assert.IsNotNull(result);
         }
 
         [TestMethod]
         public void LoginIncorrectEmail()
         {
-            IAccountServices accountService = new Implementations();
+            Implementations implementations = new Implementations();
             Account invalidAccount = new Account
             {
                 nickname = "Sujey",
@@ -48,14 +48,14 @@ namespace Tests
                 emailVerify = true,
                 password = "af7363cebf5e844dbac559ecae74de7d13a8ade6a1d53b8843f5f4475025d6eb"
             };
-            Account result = accountService.Login(invalidAccount);
+            Account result = implementations.Login(invalidAccount);
             Assert.IsNull(result);
         }
 
         [TestMethod]
         public void LoginIncorrectPassword()
         {
-            IAccountServices accountService = new Implementations();
+            Implementations implementations = new Implementations();
             Account invalidAccount = new Account
             {
                 nickname = "Sujey",
@@ -63,14 +63,14 @@ namespace Tests
                 emailVerify = true,
                 password = "af7363cebf5e844dbac559ecae74de7d13a8ade6a1d53b8843f5f44"
             };
-            Account result = accountService.Login(invalidAccount);
+            Account result = implementations.Login(invalidAccount);
             Assert.IsNull(result);
         }
 
         [TestMethod]
         public void RegisterAccountSuccesfull()
         {
-            IAccountServices accountService = new Implementations();
+            Implementations implementations = new Implementations();
             Account validAccount = new Account
             {
                 nickname = "lixie",
@@ -78,14 +78,14 @@ namespace Tests
                 emailVerify = false,
                 password = "af7363cebf5e844dbac559ecae74de7d13a8ade6a1d53b8843f5f4475025d6eb"
             };
-            bool result = accountService.RegisterAccount(validAccount);
+            bool result = implementations.RegisterAccount(validAccount);
             Assert.IsTrue(result);
         }
         
         [TestMethod]
         public void VerifyExistingEmail()
         {
-            IAccountServices accountService = new Implementations();
+            Implementations implementations = new Implementations();
             Account validAccount = new Account
             {
                 nickname = "user",
@@ -93,14 +93,14 @@ namespace Tests
                 emailVerify = false,
                 password = "af7363cebf5e844dbac559ecae74de7d13a8ade6a1d53b8843f5f4475025d6eb"
             };
-            bool result = accountService.VerifyEmail(validAccount);
+            bool result = implementations.VerifyEmail(validAccount);
             Assert.IsTrue(result);
         }
 
         [TestMethod]
         public void VerifyNotExistingEmail()
         {
-            IAccountServices accountService = new Implementations();
+            Implementations implementations = new Implementations();
             Account invalidAccount = new Account
             {
                 nickname = "user",
@@ -108,14 +108,14 @@ namespace Tests
                 emailVerify = false,
                 password = "af7363cebf5e844dbac559ecae74de7d13a8ade6a1d53b8843f5f4475025d6eb"
             };
-            bool result = accountService.VerifyEmail(invalidAccount);
+            bool result = implementations.VerifyEmail(invalidAccount);
             Assert.IsFalse(result);
         }
 
         [TestMethod]
         public void ChangePasswordExistingAccount()
         {
-            IAccountServices accountService = new Implementations();
+            Implementations implementations = new Implementations();
             Account validAccount = new Account
             {
                 nickname = "Sujey",
@@ -124,14 +124,14 @@ namespace Tests
                 password = "af7363cebf5e844dbac559ecae74de7d13a8ade6a1d53b8843f5f4475025d6eb"
             };
             String password = "e9d8ab9f2a9424dccb9e82e7a9b3e4e736f74323e0c8bbefb9b1d5b8cb24e1e0";
-            bool result = accountService.ChangePassword(validAccount, password);
+            bool result = implementations.ChangePassword(validAccount, password);
             Assert.IsTrue(result);
         }
 
         [TestMethod]
         public void ChangePasswordNonexistentAccount()
         {
-            IAccountServices accountService = new Implementations();
+            Implementations implementations = new Implementations();
             Account invalidAccount = new Account
             {
                 nickname = "lixie",
@@ -140,14 +140,14 @@ namespace Tests
                 password = "af7363cebf5e844dbac559ecae74de7d13a8ade6a1d53b8843f5f4475025d6eb"
             };
             String password = "e9d8ab9f2a9424dccb9e82e7a9b3e4e736f74323e0c8bbefb9b1d5b8cb24e1e0";
-            bool result = accountService.ChangePassword(invalidAccount, password);
+            bool result = implementations.ChangePassword(invalidAccount, password);
             Assert.IsFalse(result);
         }
 
         [TestMethod]
         public void IsCurrentPasswordMatch()
         {
-            IAccountServices accountService = new Implementations();
+            Implementations implementations = new Implementations();
             Account validAccount = new Account
             {
                 nickname = "Sujey",
@@ -156,14 +156,14 @@ namespace Tests
                 password = "af7363cebf5e844dbac559ecae74de7d13a8ade6a1d53b8843f5f4475025d6eb"
             };
             String password = "af7363cebf5e844dbac559ecae74de7d13a8ade6a1d53b8843f5f4475025d6eb";
-            bool result = accountService.IsCurrentPassword(validAccount, password);
+            bool result = implementations.IsCurrentPassword(validAccount, password);
             Assert.IsTrue(result);
         }
 
         [TestMethod]
         public void IsCurrentPasswordNoMatch()
         {
-            IAccountServices accountService = new Implementations();
+            Implementations implementations = new Implementations();
             Account invalidAccount = new Account
             {
                 nickname = "other",
@@ -172,25 +172,25 @@ namespace Tests
                 password = "20a69db924fbc16bbf478373baf9e1abd1dc8e0b338b8a8cd4033ec3defacea0"
             };
             String password = "af7363cebf5e844dbac559ecae74de7d13a8ade6a1d53b8843f5f4475025d6eb";
-            bool result = accountService.IsCurrentPassword(invalidAccount, password);
+            bool result = implementations.IsCurrentPassword(invalidAccount, password);
             Assert.IsFalse(result);
         }
 
         [TestMethod]
         public void ExistAccount()
         {
-            IAccountServices accountService = new Implementations();
+            Implementations implementations = new Implementations();
             String email = "user@gmail.com";
-            bool result = accountService.ExistAccount(email);
+            bool result = implementations.ExistAccount(email);
             Assert.IsTrue(result);
         }
 
         [TestMethod]
         public void NonexistentAccount()
         {
-            IAccountServices accountService = new Implementations();
+            Implementations implementations = new Implementations();
             String email = "lixie@gmail.com";
-            bool result = accountService.ExistAccount(email);
+            bool result = implementations.ExistAccount(email);
             Assert.IsFalse(result);
         }
 

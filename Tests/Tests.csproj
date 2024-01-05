@@ -61,6 +61,7 @@
     <Compile Include="AccountServiceTest.cs" />
     <Compile Include="PlayerServiceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RoomServiceTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

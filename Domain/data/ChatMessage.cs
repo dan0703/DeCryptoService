@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Domain.data
 {
     [DataContract]
-    public class ChatMessageClient
+    public class ChatMessage
     {
         [DataMember]
         public string nickname { get; set; } 
@@ -17,6 +17,6 @@ namespace Domain.data
         public string message { get; set; }
         [DataMember]
         public string time { get; set; }
-        public ChatMessageClient() { }
+        public ChatMessage() { }
     }
 }

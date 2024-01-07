@@ -427,7 +427,7 @@ namespace Service
         private static readonly Dictionary<int, RedTeam> redPlayers = new Dictionary<int, RedTeam>();
         private static readonly Dictionary<string, Player> players = new Dictionary<string, Player>();
         private static readonly Dictionary<string, byte[]> profilePictures = new Dictionary<string, byte[]>();
-        private static readonly Dictionary<int, List<ChatMessageClient>> roomMessages = new Dictionary<int, List<ChatMessageClient>>();
+        private static readonly Dictionary<int, List<ChatMessage>> roomMessages = new Dictionary<int, List<ChatMessage>>();
         private static readonly Dictionary<string, IChatMessageCallback> chatPlayers = new Dictionary<string, IChatMessageCallback>();
 
         public int CreateRoom(string nickname)
@@ -626,7 +626,7 @@ namespace Service
             return isFullRoom;
         }
 
-        public void SendMessage(ChatMessageClient chatMessage, int code)
+        public void SendMessage(ChatMessage chatMessage, int code)
         {
             var chatMessagesList = GetChatMessages(code);
 
@@ -680,11 +680,11 @@ namespace Service
             }
         }
 
-        public List<ChatMessageClient> GetChatMessages(int code)
+        public List<ChatMessage> GetChatMessages(int code)
         {
             if (!roomMessages.ContainsKey(code))
             {
-                roomMessages.Add(code, new List<ChatMessageClient>());
+                roomMessages.Add(code, new List<ChatMessage>());
             }
             return roomMessages[code];
         }

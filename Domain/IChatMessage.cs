@@ -12,7 +12,7 @@ namespace Domain
     public interface IChatMessage
     {
         [OperationContract(IsOneWay = true)]
-        void SendMessage(ChatMessage chatMessage, int code);
+        void SendMessage(ChatMessageClient chatMessage, int code);
 
         [OperationContract(IsOneWay = true)]
         void JoinChat(string nickname, int code);
@@ -25,6 +25,6 @@ namespace Domain
     public interface IChatMessageCallback
     {
         [OperationContract]
-        void ReceiveChatMessages(List<ChatMessage> messages);
+        void ReceiveChatMessages(List<ChatMessageClient> messages);
     }
 }

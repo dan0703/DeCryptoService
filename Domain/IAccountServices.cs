@@ -1,4 +1,4 @@
-﻿using Domain.data;
+﻿ using Domain.data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +27,10 @@ namespace Domain
         bool ChangePassword(Account account, string newPassword);
         [OperationContract]
         bool IsCurrentPassword(Account account, string currentPasswor);
+        [OperationContract]
+        bool IsEmailVerified(Account account);
+        [OperationContract]
+        bool IsEmailRegistered(String email);
         [OperationContract]
         bool ExistAccount(String email);
     }

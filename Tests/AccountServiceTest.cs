@@ -115,7 +115,7 @@ namespace Tests
             Account accountWithNullEmail = new Account
             {
                 email = null,
-                password = "somepassword"
+                password = "Somepassword1*"
             };
             bool result = implementations.RegisterAccount(accountWithNullEmail);
             Assert.IsFalse(result);
@@ -127,7 +127,7 @@ namespace Tests
             Account accountWithEmptyEmail = new Account
             {
                 email = "",
-                password = "somepassword"
+                password = "Somepassword1*"
             };
             bool result = implementations.RegisterAccount(accountWithEmptyEmail);
             Assert.IsFalse(result);
@@ -162,7 +162,7 @@ namespace Tests
             {
                 email = "",
                 emailVerify = false,
-                password = "somepassword"
+                password = "Somepassword1*"
             };
             bool result = implementations.VerifyEmail(accountWithEmptyEmail);
             Assert.IsFalse(result);
@@ -175,7 +175,7 @@ namespace Tests
             {
                 email = null,
                 emailVerify = false,
-                password = "somepassword"
+                password = "Somepassword1*"
             };
             bool result = implementations.VerifyEmail(accountWithNullEmail);
             Assert.IsFalse(result);

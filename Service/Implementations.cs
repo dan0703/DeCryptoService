@@ -22,7 +22,7 @@ namespace Service
     public partial class Implementations : IPlayerServices, IAccountServices
     {
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
+        
         private List<User> GetPlayersList()
         {
             var list = new List<User>();
@@ -106,11 +106,9 @@ namespace Service
 
         public bool RegisterAccount(Account account)
         {
-            if (account == null)
-            {
-                return false;
-            }
-            else
+            bool isSuccessful = false;
+
+            if (account != null)
             {
                 using (DeCryptoEntities context = new DeCryptoEntities())
                 {
@@ -121,11 +119,12 @@ namespace Service
                         EmailVerify = account.emailVerify,
                         Password = account.password
                     };
+
                     try
                     {
                         context.AccountSet.Add(newAccount);
                         context.SaveChanges();
-                        return true;
+                        isSuccessful = true;
                     }
                     catch (DbEntityValidationException ex)
                     {
@@ -136,19 +135,21 @@ namespace Service
                                 log.Error(validationError);
                             }
                         }
-                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        log.Error(ex);
                     }
                 }
             }
+            return isSuccessful;
         }
 
         public bool RegisterPlayer(User user)
         {
-            if (user == null)
-            {
-                return false;
-            }
-            else
+            bool success = false;
+
+            if (user != null)
             {
                 using (DeCryptoEntities context = new DeCryptoEntities())
                 {
@@ -159,20 +160,20 @@ namespace Service
                         Account_Nickname = user.accountNickname,
                         BirthDay = user.birthDay
                     };
+
                     try
                     {
                         context.UserSet.Add(newUser);
                         context.SaveChanges();
-                        return true;
-
+                        success = true;
                     }
                     catch (DbUpdateException ex)
                     {
                         log.Debug(ex);
-                        return false;
                     }
-                };
+                }
             }
+            return success;
         }
 
         public bool SendToken(string email, string title, string message, int code)
@@ -220,8 +221,39 @@ namespace Service
 
         public bool VerifyEmail(Account account)
         {
-            bool success = false;            
-            try
+            bool success = false;
+
+            if (account != null)
+            {
+                try
+                {
+                    using (DeCryptoEntities context = new DeCryptoEntities())
+                    {
+                        var foundAccount = context.AccountSet.Where(accountSet => accountSet.Email == account.email).FirstOrDefault();
+                        if (foundAccount == default)
+                        {
+                            success = false;
+                        }
+                        else
+                        {
+                            foundAccount.EmailVerify = true;
+                            context.SaveChanges();
+                            success = true;
+                        }
+                    }
+                }
+                catch (DbUpdateException ex)
+                {
+                    log.Error(ex);
+                    success = false;
+                }
+            }
+            return success;
+        }
+        public bool IsCurrentPassword(Account account, string passwordIngresed)
+        {
+            bool success = false;
+            if (account != null)
             {
                 using (DeCryptoEntities context = new DeCryptoEntities())
                 {
@@ -232,39 +264,11 @@ namespace Service
                     }
                     else
                     {
-                        foundAccount.EmailVerify = true;
-                        context.SaveChanges();
-                        success = true;
+                        if (foundAccount.Password == passwordIngresed)
+                        {
+                            success = true;
+                        }
                     }
-                }
-            }
-            catch (DbUpdateException ex)
-            {
-                log.Error(ex);
-                success = false;
-            }
-            return success;
-        }
-        public bool IsCurrentPassword(Account account, string passwordIngresed)
-        {
-            bool success = false;
-
-            using (DeCryptoEntities context = new DeCryptoEntities()){
-                var foundAccount = context.AccountSet.Where(accountSet => accountSet.Email == account.email).FirstOrDefault();
-                if (foundAccount == default)
-                {
-                    success = false;
-                }
-                else
-                {
-                     if (foundAccount.Password == passwordIngresed)
-                     {
-                        success = true;
-                     }
-                     else
-                     {
-                        success = false;
-                     }
                 }
             }
             return success;
@@ -274,27 +278,36 @@ namespace Service
         {
             bool success = false;
 
-            try
+            if (account != null)
             {
-                using (DeCryptoEntities context = new DeCryptoEntities())
+                try
                 {
-                    var foundAccount = context.AccountSet.Where(accountSet => accountSet.Email == account.email).FirstOrDefault();
-                    if (foundAccount == default)
+                    using (DeCryptoEntities context = new DeCryptoEntities())
                     {
-                        success = false;
-                    }
-                    else
-                    {
-                        foundAccount.Password = newPassword;
-                        context.SaveChanges();
-                        success = true;
+                        var foundAccount = context.AccountSet.Where(accountSet => accountSet.Email == account.email).FirstOrDefault();
+                        if (foundAccount == default)
+                        {
+                            success = false;
+                        }
+                        else
+                        {
+                            if (newPassword != "")
+                            {
+                                if (newPassword != null)
+                                {
+                                    foundAccount.Password = newPassword;
+                                    context.SaveChanges();
+                                    success = true;
+                                }
+                            } 
+                        }
                     }
                 }
-            }
-            catch (DbUpdateException ex)
-            {
-                log.Error(ex);
-                success = false;
+                catch (DbUpdateException ex)
+                {
+                    log.Error(ex);
+                    success = false;
+                }
             }
             return success;
         }
@@ -321,12 +334,13 @@ namespace Service
         public List<string> GetSimilarsNickNames(string nickname)
         {
             List<string> nickNameList = new List<string>();
+
             try
             {
                 using (DeCryptoEntities context = new DeCryptoEntities())
                 {
-                    var foundPlayers = (from Account in context.AccountSet 
-                                        where Account.Nickname.StartsWith(nickname)
+                    var foundPlayers = (from Account in context.AccountSet
+                                        where Account.Nickname.StartsWith(nickname) || Account.Nickname == nickname
                                         select Account).ToList();
                     if (foundPlayers.Any())
                     {
@@ -358,27 +372,72 @@ namespace Service
                     {
                         exist = true;
                     }
-                    else
-                    {
-                        exist = false;
-                    }
                 }
             }
             catch (EntityException ex)
             {
                 log.Error(ex);
-                exist = false;
             }
             catch (Exception ex)
             {
                 log.Error(ex);
-                exist = false;
             }
             return exist;
         }
+
+        public bool IsEmailVerified(Account account)
+        {
+            bool isVerified = false;
+
+            if (account != null)
+            {
+                try
+                {
+                    using (DeCryptoEntities context = new DeCryptoEntities())
+                    {
+                        var foundAccount = context.AccountSet.Where(accountSet => accountSet.Email == account.email 
+                        && accountSet.EmailVerify == true).FirstOrDefault();
+
+                        if (foundAccount != default)
+                        {
+                            isVerified = true;
+                        }
+                    }
+                }
+                catch (EntityException ex)
+                {
+                    log.Error(ex);
+                }
+                catch (Exception ex)
+                {
+                    log.Error(ex);
+                }
+            }
+            return isVerified;
+        }
+
+        public bool IsEmailRegistered(String email)
+        {
+            bool isRegistered = false;
+
+            try
+            {
+                using (DeCryptoEntities context = new DeCryptoEntities())
+                {
+                    isRegistered = context.AccountSet.Any(accountSet => accountSet.Email == email);
+                }
+            }
+            catch (EntityException ex)
+            {
+                log.Error(ex);
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+            }
+            return isRegistered;
+        }
     }
-
-
 
     [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Reentrant)]
     public partial class Implementations : IJoinToGame, IChatMessage, IFriendsServices, IRoomServices
@@ -592,10 +651,17 @@ namespace Service
         {
             var chatMessagesList = GetChatMessages(code);
 
-            if (chatMessagesList != null)
+            try
             {
-                roomMessages[code].Add(chatMessage);
-                SetMessage(code);
+                if (chatMessagesList != null)
+                {
+                    roomMessages[code].Add(chatMessage);
+                    SetMessage(code);
+                }
+            }
+            catch (TimeoutException ex)
+            {
+                log.Error(ex);
             }
         }
 
@@ -608,9 +674,16 @@ namespace Service
 
             var chatMessagesList = GetChatMessages(code);
 
-            if (chatMessagesList != null)
+            try
             {
-                chatPlayers[nickname].ReceiveChatMessages(chatMessagesList);
+                if (chatMessagesList != null)
+                {
+                    chatPlayers[nickname].ReceiveChatMessages(chatMessagesList);
+                }
+            }
+            catch (TimeoutException ex)
+            {
+                log.Error(ex);
             }
         }
 

@@ -15,19 +15,19 @@ namespace Tests
     {
         private DeCryptoEntities context;
         private TransactionScope transaction;
-
+        private Implementations implementations;
 
         [TestInitialize]
         public void TestInitialize()
         {
             context = new DeCryptoEntities();
             transaction = new TransactionScope();
+            implementations = new Implementations();
         }
 
         [TestMethod]
-        public void RegisterPlayer()
+        public void RegisterPlayer_ValidPlayer_Successul()
         {
-            Implementations implementations = new Implementations();
             User validUser = new User
             {
                 name = "Juan Carlos Pérez Arriaga",
@@ -39,14 +39,20 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GetSimilarNickNamesMatch()
+        public void RegisterPlayer_NullUser_ReturnsFalse()
+        {
+            User nullUser = null;
+            bool result = implementations.RegisterPlayer(nullUser);
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void GetSimilarNickNames_MatchNickname_Successful()
         {
             List<String> expected = new List<string>
             {
                 "user"
             };
-
-            Implementations implementations = new Implementations();
             String nickname = "us";
             
             List<String> result = implementations.GetSimilarsNickNames(nickname);
@@ -54,7 +60,34 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GetSimilarNickNamesNoMatch()
+        public void GetSimilarNickNames_ExactMatch_Successful()
+        {
+            List<String> expected = new List<string>
+            {
+                "Sujey"
+            };
+            String nickname = "Sujey";
+
+            List<String> result = implementations.GetSimilarsNickNames(nickname);
+            CollectionAssert.AreEqual(expected, result);
+        }
+
+        [TestMethod]
+        public void GetSimilarNickNames_DifferentCasing_ReturnFalse()
+        {
+            List<String> expected = new List<string>
+            {
+                "su",
+                "Sujey"
+            };
+            String nickname = "Su";
+
+            List<String> result = implementations.GetSimilarsNickNames(nickname);
+            CollectionAssert.AreNotEqual(expected, result);
+        }
+
+        [TestMethod]
+        public void GetSimilarNickNames_NoMatchNicknames_Error()
         {
             List<String> expected = new List<string>
             {
@@ -69,7 +102,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void ExistingNickname()
+        public void ExistNickname_AlreadyExist()
         {
             Implementations implementations = new Implementations();
             String nickname = "Sujey";
@@ -78,10 +111,19 @@ namespace Tests
         }
 
         [TestMethod]
-        public void NonexistentNickname()
+        public void ExistNickname_NonexistentNickname()
         {
             Implementations implementations = new Implementations();
             String nickname = "mingi";
+            bool result = implementations.ExistNickname(nickname);
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void ExistNickname_NullNickname_ReturnsFalse()
+        {
+            Implementations implementations = new Implementations();
+            String nickname = null;
             bool result = implementations.ExistNickname(nickname);
             Assert.IsFalse(result);
         }

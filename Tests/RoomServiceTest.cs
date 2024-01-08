@@ -18,41 +18,51 @@ namespace Tests
         private TransactionScope transaction;
 
         private Implementations implementations = new Implementations();
-        private int codeRoom;
 
         [TestInitialize]
         public void TestInitialize()
         {
             context = new DeCryptoEntities();
-            codeRoom = implementations.CreateRoom("mingilix");
             transaction = new TransactionScope();
         }
 
         [TestMethod]
-        public void CreateRoomSuccessful()
+        public void CreateRoom_ValidNickname_Successful()
         {
-            int codeRoom = implementations.CreateRoom("elrevo");
+            string validNickname = "elrevo";
+            int codeRoom = implementations.CreateRoom(validNickname);
+            Assert.IsTrue(codeRoom > 0);
         }
 
         [TestMethod]
-        public void NotFullRoom()
+        public void CreateRoom_DuplicateCode_Retry()
         {
-            var result = implementations.IsFullRoom(codeRoom);
-            Assert.IsFalse(result);
+            int codeRoom1 = implementations.CreateRoom("elRevo");
+            int codeRoom2 = implementations.CreateRoom("mingi");
+            Assert.AreNotEqual(codeRoom1, codeRoom2);
         }
 
         [TestMethod]
-        public void ExistentRoom()
+        public void AllreadyExistRoom_ExistingRoom_True()
         {
-            var result = implementations.AllreadyExistRoom(codeRoom);
+            int existingCode = implementations.CreateRoom("sue");
+            bool result = implementations.AllreadyExistRoom(existingCode);
             Assert.IsTrue(result);
         }
 
         [TestMethod]
-        public void NonexistentRoom()
+        public void AllreadyExistRoom_NonexistentRoom_False()
         {
-            int invalidCode = 123456;
-            var result = implementations.AllreadyExistRoom(invalidCode); 
+            int nonExistentCode = 123456;
+            bool result = implementations.AllreadyExistRoom(nonExistentCode);
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void IsFullRoom_NotFullRoom_False()
+        {
+            int notFullCode = implementations.CreateRoom("sue");
+            bool result = implementations.IsFullRoom(notFullCode);
             Assert.IsFalse(result);
         }
 
@@ -62,5 +72,6 @@ namespace Tests
             transaction.Dispose();
             context.Dispose();
         }
+        
     }
 }

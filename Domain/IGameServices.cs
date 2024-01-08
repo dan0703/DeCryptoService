@@ -40,6 +40,12 @@ namespace Domain
 
         [OperationContract(IsOneWay = true)]
         void SubmitRedTeamIntercepcionResult(bool isCorrectInterception, int code);
+
+        [OperationContract(IsOneWay = true)]
+        void SubmitRedTeamDecryptResult(bool isCorrectDecrypt, int code);
+
+        [OperationContract(IsOneWay = true)]
+        void SubmitBlueTeamDecryptResult(bool isCorrectDecrypt, int code);
     }
 
     [ServiceContract]

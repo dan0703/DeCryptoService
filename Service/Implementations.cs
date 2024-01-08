@@ -82,6 +82,27 @@ namespace Service
                 }
             }
         }
+        public Account LoginAsGuest()
+        {
+            int GUESTID = 0;
+            Random random = new Random();
+            var lowerBound = 10000;
+            var upperBound = 99000;
+            var code = random.Next(lowerBound, upperBound);
+            
+            var guess = new Account
+            {
+                id = GUESTID,
+                email = "guest" + code + "Acount@gmail.com",
+                nickname = "guest" + code,
+                emailVerify = false,
+            };
+            while (players.ContainsKey(guess.nickname))
+            {
+                guess.nickname += random.Next(lowerBound, upperBound);
+            }
+            return guess;
+        }
 
         public bool RegisterAccount(Account account)
         {
@@ -744,12 +765,13 @@ namespace Service
                 GameConfiguration gameConfiguration = gameConfigurations[code];
                 gameConfiguration.blueTeam.clues[gameConfiguration.roundNumber] = blueTeamClues;
                 gameConfigurations[code] = gameConfiguration;
-                var playersInGame = roomPlayers.Where(player => player.Value.Equals(code)).Select(player => player.Key).ToList();
+                var blueTeam = gameConfiguration.blueTeam;
+                var playersInGame = roomPlayers.Where(player => player.Value.Equals(code) && (player.Key.Equals(blueTeam.nicknamePlayer1) || player.Key.Equals(blueTeam.nicknamePlayer2))).Select(player => player.Key).ToList();
                 foreach(var player in playersInGame)
                 {
                     if (players.ContainsKey(player))
                     {
-                        players[player].gameServiceCallback.SetBlueTeamClues(gameConfiguration.redTeam.clues);
+                        players[player].gameServiceCallback.SetBlueTeamClues(gameConfiguration.blueTeam.clues);
                     }
                 }
             }
@@ -762,8 +784,8 @@ namespace Service
                 GameConfiguration gameConfiguration = gameConfigurations[code];
                 gameConfiguration.redTeam.clues[gameConfiguration.roundNumber] = redTeamClues;
                 gameConfigurations[code] = gameConfiguration;
-                
-                var playersInGame = roomPlayers.Where(player => player.Value.Equals(code)).Select(player => player.Key).ToList();
+                var redTeam = gameConfiguration.redTeam;
+                var playersInGame = roomPlayers.Where(player => player.Value.Equals(code) && (player.Key.Equals(redTeam.nicknamePlayer1) || player.Key.Equals(redTeam.nicknamePlayer2))).Select(player => player.Key).ToList();
                 foreach (var player in playersInGame)
                 {
                     if (players.ContainsKey(player))
@@ -787,12 +809,50 @@ namespace Service
 
         public void SubmitBlueTeamInterceptionResult(bool isCorrectInterception, int code)
         {
-            throw new NotImplementedException();
+            if (gameConfigurations.ContainsKey(code))
+            {
+                GameConfiguration gameConfiguration = gameConfigurations[code];
+                if (isCorrectInterception)
+                {
+                    gameConfiguration.blueTeam.interceptionsPoints += 1;
+                }
+                gameConfigurations[code] = gameConfiguration;
+                var blueTeam = gameConfiguration.blueTeam;
+                int interceptionPoints = gameConfiguration.blueTeam.interceptionsPoints;
+                int missComunicationPoints = gameConfiguration.blueTeam.missComunicationsPoints;
+                var playersInGame = roomPlayers.Where(player => player.Value.Equals(code) && (player.Key.Equals(blueTeam.nicknamePlayer1) || player.Key.Equals(blueTeam.nicknamePlayer2))).Select(player => player.Key).ToList();
+                foreach (var player in playersInGame)
+                {
+                    if (players.ContainsKey(player))
+                    {                        
+                        players[player].gameServiceCallback.SetBlueTeamScore(interceptionPoints, missComunicationPoints);
+                    }
+                }
+            }
         }
 
         public void SubmitRedTeamIntercepcionResult(bool isCorrectInterception, int code)
         {
-            throw new NotImplementedException();
+            if (gameConfigurations.ContainsKey(code))
+            {
+                GameConfiguration gameConfiguration = gameConfigurations[code];
+                if (isCorrectInterception)
+                {
+                    gameConfiguration.redTeam.interceptionsPoints += 1;
+                }
+                gameConfigurations[code] = gameConfiguration;
+                var redTeam= gameConfiguration.redTeam;
+                int interceptionPoints = gameConfiguration.redTeam.interceptionsPoints;
+                int missComunicationPoints = gameConfiguration.redTeam.missComunicationsPoints;
+                var playersInGame = roomPlayers.Where(player => player.Value.Equals(code) && (player.Key.Equals(redTeam.nicknamePlayer1) || player.Key.Equals(redTeam.nicknamePlayer2))).Select(player => player.Key).ToList();
+                foreach (var player in playersInGame)
+                {
+                    if (players.ContainsKey(player))
+                    {
+                        players[player].gameServiceCallback.SetRedTeamScore(interceptionPoints, missComunicationPoints);
+                    }
+                }
+            }
         }
 
         public void GiveBlueTeamGuesses(List<string> blueTeamGuesses, int code, string ownNickname)
@@ -803,6 +863,98 @@ namespace Service
         public void GiveRedTeamGesses(List<string> redTeamGuesses, int code, string ownNickname)
         {
             throw new NotImplementedException();
+        }
+
+        public void SubmitRedTeamDecryptResult(bool isCorrectDecrypt, int code)
+        {
+            Console.WriteLine("submitRedTeamDecryptResult");
+
+            if (gameConfigurations.ContainsKey(code))
+            {
+                GameConfiguration gameConfiguration = gameConfigurations[code];
+                if (!isCorrectDecrypt)
+                {
+                    gameConfiguration.redTeam.missComunicationsPoints += 1;
+                }
+                gameConfiguration.redTeam.allreadySetGuesses = true;
+                gameConfigurations[code] = gameConfiguration;
+                var redTeam = gameConfiguration.redTeam;
+                int interceptionPoints = gameConfiguration.redTeam.interceptionsPoints;
+                int missComunicationPoints = gameConfiguration.redTeam.missComunicationsPoints;
+                var redTeamPlayersInGame = roomPlayers.Where(player => player.Value.Equals(code) && (player.Key.Equals(redTeam.nicknamePlayer1) || player.Key.Equals(redTeam.nicknamePlayer2))).Select(player => player.Key).ToList();
+                foreach (var player in redTeamPlayersInGame)
+                {
+                    if (players.ContainsKey(player))
+                    {
+                        players[player].gameServiceCallback.SetRedTeamScore(interceptionPoints, missComunicationPoints);
+                        
+                    }
+                }
+                if (gameConfiguration.blueTeam.allreadySetGuesses)
+                {
+                    var playersInGame = roomPlayers.Where(player => player.Value.Equals(code)).Select(player => player.Key).ToList();
+                    gameConfiguration.roundNumber += 1;
+                    gameConfigurations[code] = gameConfiguration;
+
+                    gameConfigurations[code].redTeam.allreadySetGuesses = false;
+                    gameConfigurations[code].blueTeam.allreadySetGuesses = false;
+                    gameConfigurations[code].redTeam.allreadySetClues = false;
+                    gameConfigurations[code].blueTeam.allreadySetClues = false;
+
+                    foreach (var player in playersInGame)
+                    {
+                        if (players.ContainsKey(player))
+                        {
+                            players[player].gameServiceCallback.SetBoard(gameConfigurations[code]);
+                        }
+                    }
+
+                }
+            }
+        }
+
+        public void SubmitBlueTeamDecryptResult(bool isCorrectDecrypt, int code)
+        {
+            Console.WriteLine("submitBlueTeamDecryptResult");
+            if (gameConfigurations.ContainsKey(code))
+            {
+                GameConfiguration gameConfiguration = gameConfigurations[code];
+                if (!isCorrectDecrypt)
+                {
+                    gameConfiguration.blueTeam.missComunicationsPoints += 1;
+                }
+                gameConfiguration.blueTeam.allreadySetGuesses = true;
+                gameConfigurations[code] = gameConfiguration;
+                int interceptionPoints = gameConfiguration.blueTeam.interceptionsPoints;
+                int missComunicationPoints = gameConfiguration.blueTeam.missComunicationsPoints;
+                var blueTeam = gameConfiguration.blueTeam;
+                var blueTeamPlayersInGame = roomPlayers.Where(player => player.Value.Equals(code) && (player.Key.Equals(blueTeam.nicknamePlayer1) || player.Key.Equals(blueTeam.nicknamePlayer2))).Select(player => player.Key).ToList();
+                foreach (var player in blueTeamPlayersInGame)
+                {
+                    if (players.ContainsKey(player))
+                    {
+                        players[player].gameServiceCallback.SetRedTeamScore(interceptionPoints, missComunicationPoints);
+                    }
+                }
+                if (gameConfiguration.redTeam.allreadySetGuesses)
+                {
+                    var playersInGame = roomPlayers.Where(player => player.Value.Equals(code)).Select(player => player.Key).ToList();
+                    gameConfiguration.roundNumber += 1;
+                    gameConfigurations[code] = gameConfiguration;
+
+                    gameConfigurations[code].redTeam.allreadySetGuesses = false;
+                    gameConfigurations[code].blueTeam.allreadySetGuesses = false;
+                    gameConfigurations[code].redTeam.allreadySetClues = false;
+                    gameConfigurations[code].blueTeam.allreadySetClues = false;
+                    foreach (var player in playersInGame)
+                    {
+                        if (players.ContainsKey(player))
+                        {
+                            players[player].gameServiceCallback.SetBoard(gameConfigurations[code]);
+                        }
+                    }
+                }
+            }
         }
     }
 }

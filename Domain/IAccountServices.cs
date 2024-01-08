@@ -15,10 +15,10 @@ namespace Domain
     {
         [OperationContract]
         bool RegisterAccount(Account account);
-
         [OperationContract]
         Account Login(Account account);
-
+        [OperationContract]
+        Account LoginAsGuest();
         [OperationContract]
         bool SendToken(string email, string title, string message, int code);
         [OperationContract]

@@ -10,11 +10,7 @@ namespace DataAccess
     {
         static void Main(string[] args)
         {
-
-            using(var context = new DeCryptoEntities())
-            {
-                
-            }
+           
         }
     }
 }

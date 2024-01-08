@@ -21,7 +21,7 @@ namespace Domain.data
         [DataMember]
         public bool allreadySetGuesses { get; set; }
         [DataMember]
-        public bool allReadySetClues {  get; set; }
+        public bool allreadySetClues {  get; set; }
 
         [DataMember]
         public List<string>[] clues { get; set; } = new List<string>[4];
@@ -34,7 +34,9 @@ namespace Domain.data
             nicknamePlayer1 = "Player1";
             nicknamePlayer2 = "Player2";
             allreadySetGuesses = false;
-            allReadySetClues = false;
+            allreadySetClues = false;
+            interceptionsPoints = 0;
+            missComunicationsPoints = 0;
         }
     }
 }
